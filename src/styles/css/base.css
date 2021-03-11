@@ -1,0 +1,90 @@
+*{
+  box-sizing: border-box;
+}
+:root{
+  --swiper-theme-color: #2ecc71 !important;
+  --default-background-color: #fff;
+  --active-color: #2ecc71;
+  --active-progress: #2ecc71;
+
+  --default-i-color: #747d8c;
+  --default-border-color: rgba(0,0,0,.1);
+
+  --default-text-color: rgb(13, 12, 24);
+
+  --default-padding: 120px;
+  --default-margin: 50px;
+  --default-border-radius: 5px;
+
+  font-size: 14px;
+  font-weight: lighter;
+  font-family: "Microsoft YaHei","Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+}
+html{
+  width: 100%;
+  height: 100%;
+}
+body {
+  width: 100%;
+  background-color: var(--default-background-color);
+  color: var(--default-text-color);
+}
+body,p,dl,dd,h1, h2, h3, h4, h5, h6,form{ margin: 0;box-sizing: border-box }
+ul,ol,input,fieldset{ margin: 0; padding: 0;box-sizing: border-box }
+ul,ol{list-style-type: none;box-sizing: border-box}
+img{ border: 0;box-sizing: border-box;display: block}
+a{ text-decoration: none;color: unset}
+input,textarea{outline: none}
+textarea{resize: none}
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+i{
+  cursor: pointer;
+}
+button:hover{
+  cursor: pointer;
+}
+.music-a:after{
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  right: 100%;
+  height: 6px;
+  z-index: -1;
+}
+.music-a:hover::after{
+  right: 0;
+  background-color: var(--active-color);
+  transition: .2s ease-in-out;
+}
+.music-a.active::after{
+  right: 0;
+  background-color: var(--active-color);
+}
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0 transparent;
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: rgba(0,0,0,.1);
+  -webkit-box-shadow: inset 0 0 0 transparent;
+}
+
+
+
+
+
+
+
