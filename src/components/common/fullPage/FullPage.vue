@@ -86,7 +86,7 @@ export default {
     },
     //鼠标往前滚动，显示页面下方内容
     goUp() {
-      if (this.$refs.container && this.$refs.container.offsetTop !== 0 && !this.isScrolling) {
+      if (this.$refs.container && this.$refs.container.offsetTop !== 0 && !this.isScrolling && !this.$store.state.scrolling) {
         this.currentPageDec();
         let top = this.$refs.container.offsetTop + this.$refs.container.clientHeight;
         this.$refs.container.style.top = `${top}px`;
@@ -96,7 +96,7 @@ export default {
     //鼠标往后滚动，显示页面上方内容
     goDown() {
       if (this.$refs.container) {
-        let alreadyNum = Math.abs(this.$refs.container.offsetTop / this.$refs.container.clientHeight);
+        let alreadyNum = Math.abs(this.$refs.container.offsetTop / this.$refs.container.clientHeight && !this.$store.state.scrolling);
         let childCountNum = this.$refs.container.childElementCount;
         if (alreadyNum + 1 < childCountNum && !this.isScrolling) {
           this.currentPageAdd();
@@ -123,7 +123,7 @@ export default {
     width: 100%;
     position: relative;
     top: 0;
-    transition: .5s linear;
+    transition: .5s cubic-bezier(.19,1,.22,1);
   }
   .pager{
     position: fixed;
@@ -143,7 +143,7 @@ export default {
     margin: 10px 0;
     border-radius: 100%;
     background-color: #000;
-    transition: .25s linear;
+    transition: .25s cubic-bezier(.19,1,.22,1);
     cursor: pointer;
   }
   .pager-item:hover,

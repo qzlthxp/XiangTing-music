@@ -28,7 +28,6 @@ export default {
     async getRank() {
       try {
         this.list = (await getTopList()).list.slice(0,4);
-        console.log(this.list);
       }catch (e) {
         return e;
       }

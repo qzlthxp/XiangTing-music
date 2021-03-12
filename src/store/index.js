@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     BASEURL: 'http://47.116.70.173:8081/api',
-    APIBASEURL: 'https://netease-cloud-music-api-theta.vercel.app/',
+    API_BASEURL: 'https://netease-cloud-music-api-theta.vercel.app/',
     isLoading: false,
   },
   mutations: {

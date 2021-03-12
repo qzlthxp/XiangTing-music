@@ -3,7 +3,7 @@
 
     <!--封面 Start-->
     <div class="header-bg">
-      <img ref="userHeaderBg" :src="info.user_bg" alt="">
+      <img ref="userHeaderBg" :src="info.user_bg" alt="用户封面" />
       <!--上传封面 Start-->
       <el-upload
           v-if="isMe"
@@ -48,7 +48,7 @@
 
     <!--头像 Start-->
     <div class="user-photo">
-      <img :src="info.user_photo" alt="">
+      <img :src="info.user_photo" alt="用户头像" />
     </div>
     <!--头像 End-->
 

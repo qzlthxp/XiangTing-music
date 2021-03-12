@@ -62,7 +62,7 @@ export default {
 <style scoped>
   .ep-detail-nav{
     width: 100%;
-    height: auto;
+    min-height: 100px;
     overflow: hidden;
   }
   .poster{

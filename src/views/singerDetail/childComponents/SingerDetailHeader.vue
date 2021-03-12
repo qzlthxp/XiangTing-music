@@ -1,5 +1,8 @@
 <template>
   <div class="singer-detail-header" v-if="Object.keys(detailInfo).length">
+    <div class="singer-photo">
+      <img :src="detailInfo.artist.cover" alt="歌手图片" />
+    </div>
     <div class="singer-info-content">
       <h3 class="singer-name">{{detailInfo.artist.name}}</h3>
       <p>
@@ -16,9 +19,6 @@
         <button v-show="!SingerIsUserLike" class="addFollow" @click="addLikeSinger">+ 关注</button>
         <button v-show="SingerIsUserLike" class="remFollow" @click="removeLikeSinger">取消关注</button>
       </div>
-    </div>
-    <div class="singer-photo">
-      <img :src="detailInfo.artist.cover" alt="">
     </div>
   </div>
 </template>
@@ -96,14 +96,12 @@ export default {
     align-items: center;
   }
   .singer-photo{
-    order: 0;
     width: 250px;
     height: 250px;
     border-radius: 100%;
     overflow: hidden;
   }
   .singer-info-content{
-    order: 1;
     width: calc(100% - 250px);
     height: 100%;
     padding-left: 50px;

@@ -4,7 +4,7 @@
       <lrc-detail-left :epInfo="epInfo"></lrc-detail-left>
     </div>
     <div class="right" v-if="Object.keys(songInfo).length">
-      <lrc-detail-right :songInfo="songInfo"></lrc-detail-right>
+      <lrc-detail-right :epInfo="epInfo" :songInfo="songInfo"></lrc-detail-right>
       <div class="lrc-similar" v-if="Object.keys(lrc).length">
         <lrc :lrc="lrc"></lrc>
         <similar-song v-if="similarSongs.length" :similar-songs="similarSongs"></similar-song>

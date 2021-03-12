@@ -12,10 +12,10 @@
     </div>
     
     <div class="left-img">
-      <img src="../../assets/image/public/logo.png" alt="">
+      <img src="../../assets/image/public/logo.png" alt="左侧logo" />
     </div>
     <div class="right-img">
-      <img src="../../assets/image/public/logo.png" alt="">
+      <img src="../../assets/image/public/logo.png" alt="右侧logo" />
     </div>
   </div>
 </template>

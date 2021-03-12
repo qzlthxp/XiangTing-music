@@ -6,7 +6,7 @@
           :key="index"
           @click="toSong(index)"
       >
-        <img :src="item.album.blurPicUrl" alt="">
+        <img :src="item.album.blurPicUrl" alt="专辑封面" />
         <span>{{item.name}}</span>
       </li>
     </ul>

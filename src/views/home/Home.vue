@@ -105,15 +105,9 @@ export default {
     pageChanged(num) {
       switch (num) {
         case 0:
-          setTimeout( () => {
-            this.recListsScrollActive = false;
-          }, 500);
           this.page1ScrollActive = true;
           break;
         case 1:
-          setTimeout( () => {
-            this.page1ScrollActive = false;
-          }, 500);
           this.recListsScrollActive = true;
           break;
         default:
@@ -159,22 +153,22 @@ export default {
     position: relative;
     top: 2rem;
     opacity: 0;
-    animation: .5s swift-up ease-out forwards,
-  .5s fade-in ease-out forwards;
-    animation-delay: .8s;
+    animation: .5s swift-up cubic-bezier(.19,1,.22,1) forwards,
+  .5s fade-in cubic-bezier(.19,1,.22,1) forwards;
+    animation-delay: .5s;
   }
   .left .desc h1 span{
     display: inline-block;
     overflow: hidden;
     position: relative;
     top: 2rem;
-    animation: .3s swift-up ease-in-out forwards;
+    animation: .3s swift-up cubic-bezier(.19,1,.22,1) forwards;
   }
   .left .desc h1 span i{
     font-style: normal;
     position: relative;
     top: 5rem;
-    animation: .5s swift-up ease-in-out forwards;
+    animation: .5s swift-up cubic-bezier(.19,1,.22,1) forwards;
     cursor: default;
   }
   .left .desc h1 span:nth-of-type(1) i {
@@ -210,8 +204,9 @@ export default {
     opacity: 0;
   }
   .page1.scrollActive .left .page1-banner{
-    animation: rightBanner .25s linear forwards;
-    animation-delay: 1s;
+    animation: rightBanner .25s cubic-bezier(.19,1,.22,1) forwards,
+    .25s fade-in cubic-bezier(.19,1,.22,1) forwards;
+    animation-delay: .8s;
   }
   .right{
     width: 40%;
@@ -222,7 +217,7 @@ export default {
     position: relative;
     opacity: 0;
     animation: .5s fade-in ease-out forwards;
-    animation-delay: 1.5s;
+    animation-delay: 1s;
   }
   .recommend{
     width: 100%;
@@ -248,7 +243,6 @@ export default {
   }
   @keyframes rightBanner {
     100%{
-      opacity: 1;
       left: 0;
     }
   }

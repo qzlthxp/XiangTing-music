@@ -93,7 +93,7 @@
         </div>
         <!--播放列表按钮 End-->
         <!--播放列表详情 Start-->
-        <div class="song-list"  v-show="songListIsShow">
+        <div class="song-list" v-show="songListIsShow" ref="SongList">
           <header>
             <p class="song-list-total">播放列表<span>(共{{totalSongList}}首)</span></p>
             <p class="clear-song-list" @click="clearSongList">清空列表</p>
@@ -108,7 +108,7 @@
             </div>
             <!--列表中没有音乐 End-->
             <!--列表中有音乐 Start-->
-            <div v-show="totalSongList" class="has-song-list">
+            <div v-show="totalSongList" class="has-song-list" ref="hasSongList">
               <div class="has-song-list-div"
                    v-for="(item,index) in this.$store.state.song.songList"
                    :key="index"
@@ -216,7 +216,6 @@
 <script>
 import {mapGetters} from 'vuex';
 import {formatTime} from "@/common/utils";
-
 export default {
   name: "MusicPlayer",
   data() {
@@ -276,11 +275,11 @@ export default {
   },
   mounted() {
     window.addEventListener('mousemove', this.showMusicPlayer);
+    this.$refs.domAudio.volume = this.volumeSize;
     this.$refs.domAudio.addEventListener('canplay', () => {
       this.totalTime = this.$refs.domAudio.duration;
       this.songLoadisShow = false;
     });
-    this.$refs.domAudio.volume = this.volumeSize;
     /*
     拖动打开，打开状态鼠标抬起可以按照拖动进度播放
     不会在拖动过程中影响音乐播放
@@ -322,6 +321,11 @@ export default {
       this.$nextTick( () => {
         this.playSongOfList(index);
       });
+    });
+    this.$bus.$on('changeCurrTimeByLrc', time => {
+      this.currentTime = time;
+      this.$refs.domAudio.currentTime = time;
+      this.changeProgress();
     });
   },
   methods: {

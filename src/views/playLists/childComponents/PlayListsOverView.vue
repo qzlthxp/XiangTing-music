@@ -6,7 +6,7 @@
          @click="goPlayListsDetail(index)"
     >
       <div class="box-bg">
-        <img :src="item.play_lists_poster" alt="">
+        <img :src="item.play_lists_poster" alt="歌单封面" />
       </div>
       <div class="play-icon">
         <i class="fa fa-play-circle-o fa-fw fa-4x"></i>

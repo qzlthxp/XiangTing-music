@@ -2,7 +2,7 @@
   <div class="rank-list-left">
     <ul>
       <li class="list-item" v-for="(item,index) in list" :key="index">
-        <img class="list-cover-img" :src="item.coverImgUrl" alt="">
+        <img class="list-cover-img" :src="item.coverImgUrl" alt="排行榜图片" />
         <p class="list-name">{{item.name}}</p>
       </li>
     </ul>
@@ -26,7 +26,7 @@ export default {
 <style scoped>
   .rank-list-left{
     width: 100%;
-    height: auto;
+    min-height: 100px;
     padding: 10px 0;
     box-shadow: 0 0 10px var(--default-border-color);
   }

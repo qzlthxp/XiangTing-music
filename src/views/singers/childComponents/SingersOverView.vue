@@ -5,7 +5,7 @@
          v-for="(item,index) in Infos"
          :key="index"
     >
-      <img title="点击查看该歌手信息" :src="item.picUrl" @click="goSingerDetail(index)" alt="歌手海报">
+      <img title="点击查看该歌手信息" :src="item.picUrl" @click="goSingerDetail(index)" alt="歌手图片" />
       <span class="singer-name" @click="goSingerDetail(index)">{{item.name}}</span>
     </div>
     <!--每个歌手显示 End-->

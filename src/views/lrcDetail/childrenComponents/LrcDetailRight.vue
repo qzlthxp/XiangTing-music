@@ -10,7 +10,7 @@
         </p>
         <p class="publish-time">
           <span>发行日期：</span>
-          <span>{{songInfo.publishTime | formatDate}}</span>
+          <span>{{issueDate(epInfo)}}</span>
         </p>
       </div>
     </header>
@@ -28,10 +28,20 @@ export default {
       default() {
         return {};
       }
+    },
+    epInfo: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   },
-  filters: {
-    formatDate
+  computed: {
+    issueDate() {
+      return data => {
+        return formatDate(data.publishTime);
+      }
+    }
   },
   methods: {
     toSingerDetail(id) {

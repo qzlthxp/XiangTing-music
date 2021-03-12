@@ -111,6 +111,15 @@ const routes = [
           title: '歌词',
           isAlive: false,
         }
+      },
+      {
+        path: 'search',
+        name: "Search",
+        component: () => import('@/views/search/Search'),
+        meta: {
+          title: '搜索',
+          isAlive: false,
+        }
       }
     ],
   },

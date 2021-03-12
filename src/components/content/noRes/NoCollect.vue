@@ -1,7 +1,7 @@
 <template>
     <div class="no-collect">
       <img src="../../../assets/image/public/nocollect.png" alt="暂无歌曲">
-      <p>暂无收藏</p>
+      <p>暂无内容</p>
     </div>
 </template>
 

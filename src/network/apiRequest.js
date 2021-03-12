@@ -3,7 +3,7 @@ import store from '../store/index';
 
 export function apiRequest(config) {
   const instance = axios.create({
-    baseURL: store.state.APIBASEURL,
+    baseURL: store.state.API_BASEURL,
     timeout: 5000
   });
 

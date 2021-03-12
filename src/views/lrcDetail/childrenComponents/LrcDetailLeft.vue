@@ -1,6 +1,6 @@
 <template>
   <div class="lrc-detail-left">
-    <img :src="epInfo.blurPicUrl" alt="">
+    <img :src="epInfo.blurPicUrl" alt="专辑封面" />
     <p class="desc">
       <span class="desc-title">专辑简介：</span>
       <span :title="epInfo.description" class="desc-content">{{epInfo.description | decDesc}}</span>
@@ -28,9 +28,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.epInfo);
-  }
 }
 </script>
 
@@ -39,7 +36,7 @@ export default {
     position: sticky;
     top: 80px;
     width: 100%;
-    height: auto;
+    min-height: 100px;
     overflow: hidden;
   }
   .desc{

@@ -87,11 +87,12 @@ export default {
     songs() {
       let arr = [];
       if (this.songInfos.length) {
+        console.log(this.songInfos);
         this.songInfos.forEach( (value) => {
           if (value.ar.length === 1) {
             let obj = {
               id: value.id,
-              singer_id: this.$route.params.singer_id,
+              singer_id: value.ar[0].id,
               singer_name: value.ar[0].name,
               song_name: value.name,
               song_url: `https://music.163.com/song/media/outer/url?id=${value.id}.mp3`,

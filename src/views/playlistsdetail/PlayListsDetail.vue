@@ -24,7 +24,7 @@
     <div v-if="playListsInfo.length" class="right">
       <p class="play-lists-title">{{playListsInfo[0].play_lists_title}}</p>
       <div class="user-info">
-        <img class="user-photo" :src="playListsInfo[0].user_photo" alt="">
+        <img class="user-photo" :src="playListsInfo[0].user_photo" alt="用户头像" />
         <span class="user-name" @click="ToUser(playListsInfo[0].user_id)">{{playListsInfo[0].user_name}}</span>
       </div>
       <p class="publish-time"><span>发布日期：</span><span>{{issueDate}}</span></p>
@@ -117,7 +117,7 @@ export default {
   }
   .left{
     width: 250px;
-    height: auto;
+    min-height: 100px;
     overflow: hidden;
     display: flex;
     flex-direction: column;

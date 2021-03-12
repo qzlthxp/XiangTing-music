@@ -29,7 +29,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9;
+    z-index: 5;
     overflow: hidden;
   }
   .spinner {

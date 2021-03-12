@@ -1,5 +1,12 @@
 import {apiRequest} from "@/network/apiRequest";
 
+export function searchHot() {
+  return apiRequest({
+    url: '/search/hot',
+    method: 'get',
+  })
+}
+
 export function searchSingers(keywords) {
   return apiRequest({
     url: '/search',
@@ -37,3 +44,14 @@ export function searchEps(keywords) {
 }
 
 
+export function searchMore(obj) {
+  return apiRequest({
+    url: '/cloudsearch',
+    method: 'get',
+    params: {
+      keywords: obj.keywords,
+      type: obj.type,
+      limit: 30,
+    }
+  })
+}

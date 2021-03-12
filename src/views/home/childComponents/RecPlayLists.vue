@@ -153,16 +153,16 @@ export default {
     right: -60px;
   }
   .rec-play-lists.scrollActive .title{
-    animation: removeOpacityTran .5s linear forwards;
+    animation: removeOpacityTran .5s cubic-bezier(.19,1,.22,1) forwards;
     animation-delay: .5s;
   }
   .rec-play-lists.scrollActive .select{
-    animation: removeOpacityTran .5s linear forwards;
-    animation-delay: .75s;
+    animation: removeOpacityTran .5s cubic-bezier(.19,1,.22,1) forwards;
+    animation-delay: .7s;
   }
   .rec-play-lists.scrollActive .overView-container{
-    animation: removeOpacityTran .5s linear forwards;
-    animation-delay: 1.25s;
+    animation: removeOpacityTran .5s cubic-bezier(.19,1,.22,1) forwards;
+    animation-delay: .9s;
   }
 
   @keyframes removeOpacityTran {

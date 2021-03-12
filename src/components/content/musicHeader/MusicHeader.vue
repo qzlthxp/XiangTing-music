@@ -25,28 +25,36 @@
             placeholder="搜索歌手 / 歌曲 / 专辑"
             v-model.trim="searchText"
         >
-        <button class="search-img">
+        <button class="search-img" @click="textToSearch">
           <i style="color: var(--active-color)" class="fa fa-search"></i>
         </button>
-        <div class="search-content">
+        <div v-show="searchText" class="search-content">
           <section>
-            <div v-show="searchVal.singer.length" class="search-singer">
+            <div class="search-singer">
               <div class="title">歌手</div>
               <div class="content">
+                <div class="content-item" v-show="!searchVal.singer.length">
+                  <p>暂无数据</p>
+                </div>
                 <div class="content-item"
+                     v-show="searchVal.singer.length"
                      v-for="(item,index) in searchVal.singer"
                      :key="index"
                      @click="toSingerDetail(item.id)"
                 >
-                  <img class="singer-pic" :src="item.picUrl" alt="">
+                  <img class="singer-pic" :src="item.picUrl" alt="歌手图片" />
                   <p class="singer-name">{{item.name}}</p>
                 </div>
               </div>
             </div>
-            <div v-show="searchVal.song.length" class="search-song">
+            <div class="search-song">
               <div class="title">歌曲</div>
               <div class="content">
+                <div class="content-item" v-show="!searchVal.song.length">
+                  <p>暂无数据</p>
+                </div>
                 <div class="content-item"
+                     v-show="searchVal.song.length"
                      v-for="(item,index) in searchVal.song"
                      :key="index"
                      @click="toSongDetail(item.id)"
@@ -55,21 +63,41 @@
                 </div>
               </div>
             </div>
-            <div v-show="searchVal.ep.length" class="search-ep">
+            <div class="search-ep">
               <div class="title">专辑</div>
               <div class="content">
+                <div class="content-item" v-show="!searchVal.ep.length">
+                  <p>暂无数据</p>
+                </div>
                 <div class="content-item"
+                     v-show="searchVal.ep.length"
                      v-for="(item,index) in searchVal.ep"
                      :key="index"
                      @click="toEpDetail(item.id)"
                 >
-                  <img class="ep-pic" :src="item.picUrl" alt="">
+                  <img class="ep-pic" :src="item.picUrl" alt="专辑封面" />
                   <p class="ep-name">{{item.name}}&nbsp;-&nbsp;{{item.artists[0].name}}</p>
                 </div>
               </div>
             </div>
           </section>
-          <loading v-show="loading || !searchText"></loading>
+          <loading v-show="loading"></loading>
+        </div>
+        <div v-show="!searchText" class="search-content">
+          <p class="search-hot-title">热门搜索</p>
+          <div v-show="searchHot.length">
+            <p class="search-hot-item"
+               v-for="(item,index) in searchHot"
+               :key="index"
+               @click="hotWordToSearch(index)"
+            >
+              <span v-show="index === 0" class="search-hot-num" style="color: #ff5249">{{index + 1}}</span>
+              <span v-show="index === 1" class="search-hot-num" style="color: #ff7f29">{{index + 1}}</span>
+              <span v-show="index === 2" class="search-hot-num" style="color: #fcc54e">{{index + 1}}</span>
+              <span v-show="index > 2" class="search-hot-num">{{index + 1}}</span>
+              <span class="search-hot-word">{{item.first}}</span>
+            </p>
+          </div>
         </div>
       </div>
       <!--搜索 End-->
@@ -78,7 +106,7 @@
       <div class="right">
         <div class="login-box" @mouseover="showUserInfo">
           <p v-if="!$store.state.user.userInfo.user_token" @click="beginLogin">登录&nbsp;/&nbsp;注册</p>
-          <img v-if="$store.state.user.userInfo.user_token" :src="$store.state.user.userInfo.user_photo" alt="">
+          <img v-if="$store.state.user.userInfo.user_token" :src="$store.state.user.userInfo.user_photo" alt="用户头像" />
           <user-card v-show="userInfoIsShow && $store.state.user.userInfo.user_token" @mouseleave.native="hideUserInfo"></user-card>
         </div>
         <el-button v-if="!this.$store.state.user.userInfo.user_token" style="background-color: var(--active-color); color: #fff" @click="noLogin">上传单曲<i class="el-icon-upload el-icon--right"></i></el-button>
@@ -102,7 +130,7 @@
 <script>
 import UserCard from "@/components/content/userCard/UserCard";
 import Loading from "@/components/common/loading/Loading";
-import {searchSingers, searchSongs, searchEps} from "@/network/search";
+import {searchHot ,searchSingers, searchSongs, searchEps} from "@/network/search";
 import {debounce} from "@/common/utils";
 
 export default {
@@ -110,15 +138,17 @@ export default {
   data() {
     return {
       loading: false,
-      currentIndex: 0,
-      searchText: '',
+      userInfoIsShow: false,
       searchVal: {
         singer: [],
         song: [],
         ep: []
       },
+      searchHot: [],
+      searchText: '',
       color: '',
-      userInfoIsShow: false,
+      uploadSongName: '',
+      currentIndex: 0,
       navInfo: [
         {name: '推荐', url: '/music_main/home'},
         {name: '排行榜', url: '/music_main/ranklist'},
@@ -126,7 +156,6 @@ export default {
         {name: '分类歌单', url: '/music_main/playlists'},
       ],
       fileType: ['audio/wav','audio/mpeg'],
-      uploadSongName: '',
     }
   },
   watch: {
@@ -158,7 +187,17 @@ export default {
     UserCard,
     Loading
   },
+  created() {
+    this.getSearchHot();
+  },
   methods: {
+    async getSearchHot() {
+      try {
+        this.searchHot = (await searchHot()).result.hots;
+      }catch (e) {
+        return e;
+      }
+    },
     async getSearch(keywords) {
       try {
         this.loading = true;
@@ -214,6 +253,22 @@ export default {
     },
     toEpDetail(id) {
       this.$router.push('/music_main/ep_detail/' + id);
+    },
+    textToSearch() {
+      this.$router.push({
+        path: '/music_main/search',
+        query: {
+          searchWord: this.searchText,
+        }
+      });
+    },
+    hotWordToSearch(index) {
+      this.$router.push({
+        path: '/music_main/search',
+        query: {
+          searchWord: this.searchHot[index].first
+        }
+      });
     }
   },
 }
@@ -305,11 +360,37 @@ header ul li a.active{
 .search-content:hover{
   display: block;
 }
+.search-hot-item{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.search-hot-item:hover{
+  background-color: rgb(247,247,247);
+  cursor: pointer;
+}
+.search-hot-title{
+  font-weight: bold;
+}
+.search-hot-num{
+  width: 20px;
+  line-height: 30px;
+  font-weight: 400;
+}
+.search-hot-word{
+  flex: 1;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .search-content .search-singer,
 .search-content .search-song,
 .search-content .search-ep{
   display: flex;
-  padding: 10px 0;
+  padding: 15px 0;
   border-bottom: 1px solid #eee;
   overflow: hidden;
 }

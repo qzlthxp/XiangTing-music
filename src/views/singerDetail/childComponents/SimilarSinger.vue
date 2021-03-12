@@ -7,7 +7,7 @@
           :key="index"
           @click="toSingerDetail(item.id)"
       >
-        <img class="singer-photo" :src="item.picUrl" alt="歌手图片">
+        <img class="singer-photo" :src="item.picUrl" alt="歌手图片" />
         <span class="singer-name">{{item.name}}</span>
       </li>
     </ul>

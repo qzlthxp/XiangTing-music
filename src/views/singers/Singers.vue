@@ -1,7 +1,7 @@
 <template>
   <div class="singers">
     <div class="imgBox" ref="singerBgBox">
-      <img ref="singerBg" src="https://y.gtimg.cn/mediastyle/yqq/img/bg_singer.jpg" alt="">
+      <img ref="singerBg" src="https://y.gtimg.cn/mediastyle/yqq/img/bg_singer.jpg" alt="歌手页背景" />
       <div class="content">
         <p>众多歌手，尽在眼前。</p>
       </div>
@@ -114,9 +114,7 @@ export default {
     overflow: hidden;
   }
   .imgBox img{
-    width: 100%;
-    height: 200%;
-    position: absolute;
+    min-height: 150%;
     object-fit: cover;
   }
   .imgBox .content{
