@@ -1,7 +1,7 @@
 <template>
   <div class="similar-singer">
     <header>相似歌手</header>
-    <ul v-if="similarSingers.length">
+    <ul v-show="similarSingers.length">
       <li class="singer-box"
           v-for="(item, index) in similarSingers"
           :key="index"

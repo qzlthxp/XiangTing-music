@@ -12,7 +12,13 @@
         <p class="song--singer-info">
           <span :title="songName" class="song-name">{{songName}}</span>
           <span>&nbsp;-&nbsp;</span>
-          <span :title="singerName" class="singer-name" @click="goSingerDetail(currentIndex)">{{singerName}}</span>
+          <span class="singer-name"
+                v-for="(item,index) in singerInfo"
+                :key="index"
+                @click="goSingerDetail(index)"
+          >
+            {{item.name}}
+          </span>
         </p>
         <div class="progress" ref="domProgress">
           <div class="click-space"
@@ -33,12 +39,9 @@
           </div>
         </div>
         <div class="time">
-          <div class="current">
-            {{currentTime | formatTime}}
-          </div>
-          <div class="total">
-            {{totalTime | formatTime}}
-          </div>
+          <span class="current">{{currentTime | formatTime}}</span>
+          <span>/</span>
+          <span class="total">{{totalTime | formatTime}}</span>
         </div>
       </div>
       <!--歌曲信息、播放进度 End-->
@@ -133,11 +136,13 @@
                   </div>
                   <div class="song-singer">
                     <a href="javascript:;"
+                       v-for="(val, key) in item.singer_info"
+                       :key="key"
                        @mouseenter="elTransform($event)"
                        @mouseleave="elTransformBack($event)"
-                       @click="goSingerDetail(index)"
+                       @click="goSingerDetail(key)"
                     >
-                      {{item['singer_name']}}
+                      {{val.name}}
                     </a>
                   </div>
                   <div class="song-duration"  @mouseenter="showSelect(index)">
@@ -205,7 +210,6 @@
     <audio
         id="audio1"
         ref="domAudio"
-        src=""
         @timeupdate="getCurrentTime($event)"
         @ended="songEnded"
     >
@@ -229,6 +233,7 @@ export default {
       mouseUpChangeCurrentTime: false,
       songLoadisShow: false,
       showUnlockPlayer: false,
+      isUser: false,
       currentMode: 0,
       totalTime: 0,
       currentTime: 0,
@@ -240,7 +245,7 @@ export default {
       currentSelectIndex: null,
       fit: 'cover',
       songName: '歌曲',
-      singerName: '歌手',
+      singerInfo: [],
       modes: [
         {title: '循环播放', class: 'fa fa-repeat fa-lg fa-fw'},
         {title: '单曲循环', class: 'fa fa-retweet fa-lg fa-fw'},
@@ -275,11 +280,7 @@ export default {
   },
   mounted() {
     window.addEventListener('mousemove', this.showMusicPlayer);
-    this.$refs.domAudio.volume = this.volumeSize;
-    this.$refs.domAudio.addEventListener('canplay', () => {
-      this.totalTime = this.$refs.domAudio.duration;
-      this.songLoadisShow = false;
-    });
+    this.initAudio();
     /*
     拖动打开，打开状态鼠标抬起可以按照拖动进度播放
     不会在拖动过程中影响音乐播放
@@ -329,13 +330,22 @@ export default {
     });
   },
   methods: {
-    //
+    //播放器初始化
+    initAudio() {
+      this.$refs.domAudio.volume = this.volumeSize;
+      this.$refs.domAudio.addEventListener('canplay', () => {
+        this.totalTime = this.$refs.domAudio.duration;
+        this.songLoadisShow = false;
+      });
+    },
+    //点击封面跳转到歌词页面
     toLrcDetail() {
-      if (this.currentIndex !== null) {
+      if (this.currentIndex !== null && !this.isUser) {
         let song_id = this.$store.state.song.songList[this.currentIndex].id;
         this.$router.push('/music_main/lrc_detail/' + song_id);
       }
     },
+    //点击喜欢添加歌曲
     addLikeSong(type,index) {
       if (!this.$store.state.user.userInfo.user_token) {
         this.$bus.$emit('show-notice', '登录后可添加喜欢的歌曲');
@@ -360,6 +370,7 @@ export default {
         }
       }
     },
+    //移除喜欢
     removeLikeSong(type,index) {
       switch (type) {
         case 'right':
@@ -380,6 +391,7 @@ export default {
           break;
       }
     },
+    //歌单没有歌曲点击跳转到首页推荐
     goHome() {
       this.$router.push('/music_main/home');
       this.songListIsShow = false;
@@ -442,7 +454,12 @@ export default {
     },
     //跳转到歌手详情页
     goSingerDetail(index) {
-      this.$router.push('/music_main/singer_detail/' + this.$store.state.song.songList[index].singer_id + '/careful_chose');
+      let singerId = this.singerInfo[index].id;
+      if (!this.isUser) {
+        this.$router.push('/music_main/singer_detail/' + singerId + '/careful_chose');
+      }else {
+        this.$router.push('/music_main/user/' + singerId);
+      }
     },
     //清空播放列表
     clearSongList() {
@@ -481,13 +498,25 @@ export default {
       this.reset();
       this.currentIndex = index;
       this.domSongListDiv.style.backgroundColor = "rgb(247,247,247)";
-      this.$refs.domPoster.src = this.$store.state.song.songList[index].al.picUrl;
-      this.$refs.domAudio.src = this.$store.state.song.songList[index].song_url;
-      this.songName = this.$store.state.song.songList[index].song_name;
-      this.singerName = this.$store.state.song.songList[index].singer_name;
-      this.$refs.domAudio.load();
-      this.songLoadisShow = true;
-      this.playMusic();
+      let songInfo = this.$store.state.song.songList[index];
+      if (songInfo.isUser) {
+        this.isUser = true;
+      }else {
+        this.isUser = false;
+      }
+      if (Object.keys(songInfo).length) {
+        if (!songInfo.al || !Object.keys(songInfo.al).length) {
+          this.$refs.domPoster.src = songInfo.singer_info[0].photo;
+        }else {
+          this.$refs.domPoster.src = songInfo.al.picUrl;
+        }
+        this.$refs.domAudio.src = songInfo.song_url;
+        this.songName = songInfo.song_name;
+        this.singerInfo = songInfo.singer_info;
+        this.$refs.domAudio.load();
+        this.songLoadisShow = true;
+        this.playMusic();
+      }
     },
     //播放音乐
     playMusic() {
@@ -680,7 +709,7 @@ export default {
       this.$refs.domAudio.src = "";
       this.songName = '歌曲';
       this.songName = '歌曲';
-      this.singerName = '歌手';
+      this.singerName = [];
       this.isPlayed = false;
       this.totalTime = 0;
       this.currentTime = 0;
@@ -690,6 +719,10 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('mousemove', this.showMusicPlayer);
+    this.$refs.domAudio.removeEventListener('canplay', () => {
+      this.totalTime = this.$refs.domAudio.duration;
+      this.songLoadisShow = false;
+    });
   }
 }
 </script>
@@ -806,7 +839,7 @@ export default {
 .time{
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 .progress-btn,
 .volume-btn{

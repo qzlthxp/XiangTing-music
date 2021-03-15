@@ -69,7 +69,7 @@ export default {
   actions: {
     async likeSongIsAdd(context, payload) {
       try {
-        let res = (await updateUserLikeSong(context.state.userInfo.user_id, payload.song_id))[0];
+        let res = await updateUserLikeSong(context.state.userInfo.user_id, payload.song_id);
         context.commit('coverSongs', res.songs);
         payload.this.$toasted.show(res.message);
       }catch (e) {
@@ -78,7 +78,7 @@ export default {
     },
     async likeSongIsDec(context, payload) {
       try {
-        let res = (await updateRemoveUserLikeSong(context.state.userInfo.user_id, payload.song_id))[0];
+        let res = await updateRemoveUserLikeSong(context.state.userInfo.user_id, payload.song_id);
         context.commit('coverSongs', res.songs);
         payload.this.$toasted.show(res.message);
       }catch (e) {
@@ -87,7 +87,7 @@ export default {
     },
     async likeSingerIsAdd(context, payload) {
       try {
-        let res = (await updateUserLikeSinger(context.state.userInfo.user_id, payload.singer_id))[0];
+        let res = await updateUserLikeSinger(context.state.userInfo.user_id, payload.singer_id);
         context.commit('coverSingers', res.singers);
         payload.this.$toasted.show(res.message);
       }catch (e) {
@@ -96,7 +96,7 @@ export default {
     },
     async likeSingerIsDec(context, payload) {
       try {
-        let res = (await updateRemoveUserLikeSinger(context.state.userInfo.user_id, payload.singer_id))[0];
+        let res = await updateRemoveUserLikeSinger(context.state.userInfo.user_id, payload.singer_id);
         context.commit('coverSingers', res.singers);
         payload.this.$toasted.show(res.message);
       }catch (e) {
@@ -105,7 +105,7 @@ export default {
     },
     async likePlayListsIsAdd(context, payload) {
       try {
-        let res = (await updateUserLikePlayLists(context.state.userInfo.user_id, payload.play_lists_id))[0];
+        let res = await updateUserLikePlayLists(context.state.userInfo.user_id, payload.play_lists_id);
         context.commit('coverPlayLists', res.playLists);
         payload.this.$toasted.show(res.message);
       }catch (e) {
@@ -114,7 +114,7 @@ export default {
     },
     async likePlayListsIsDec(context, payload) {
       try {
-        let res = (await updateRemoveUserLikePlayLists(context.state.userInfo.user_id, payload.play_lists_id))[0];
+        let res = await updateRemoveUserLikePlayLists(context.state.userInfo.user_id, payload.play_lists_id);
         context.commit('coverPlayLists', res.playLists);
         payload.this.$toasted.show(res.message);
       }catch (e) {

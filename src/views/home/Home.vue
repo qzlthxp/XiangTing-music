@@ -82,7 +82,7 @@ export default {
   methods: {
     async getHotP() {
       try {
-        this.playLists = paging(quickSortPlayLists(await getHotPlayLists()), 5);
+        this.playLists = paging(quickSortPlayLists((await getHotPlayLists()).data), 5);
       }catch (e) {
         return e;
       }
@@ -90,7 +90,7 @@ export default {
     async getPlayListsByDetail(detailCateId) {
       try {
         if (detailCateId !== 0) {
-          this.playLists = paging(await getPlayLists(detailCateId), 5);
+          this.playLists = paging((await getPlayLists(detailCateId)).data, 5);
         }else {
           await this.getHotP();
         }

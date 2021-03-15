@@ -5,8 +5,8 @@
     </div>
     <div class="main-container">
       <p class="ep-name">{{epName}}</p>
-      <song-info v-show="songs.length" :song-infos="songs"></song-info>
-      <no-music v-show="!songs.length"></no-music>
+      <song-info v-if="songs.length" :song-infos="songs"></song-info>
+      <no-music v-if="!songs.length"></no-music>
     </div>
   </div>
 </template>

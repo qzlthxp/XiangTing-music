@@ -48,20 +48,18 @@ const routes = [
           {
             path: 'careful_chose',
             name: 'SingerDetailCarefulChose',
-            component: () => import('@/views/singerDetail/childComponents/SingerDetailCarefulChose'),
+            component: () => import('@/views/singerDetailCarefulChose/SingerDetailCarefulChose'),
             meta: {
               title: '精选歌曲',
               isAlive: false,
-              requireAuth: true,
             },
           },
           {
             path: 'eps',
             name: 'SingerDetailEp',
-            component: () => import('@/views/singerDetail/childComponents/SingerDetailEp'),
+            component: () => import('@/views/singerDetailEp/SingerDetailEp'),
             meta: {
               title: '专辑',
-              requireAuth: true,
             },
           },
         ],
@@ -91,7 +89,6 @@ const routes = [
         meta: {
           title: '歌单详情',
           isAlive: false,
-          requireAuth: true,
         }
       },
       {
@@ -124,6 +121,22 @@ const routes = [
     ],
   },
   {
+    path: '/playlists_manage',
+    name: 'PlayListsManage',
+    component: () => import('@/views/playListsManage/PlayListsManage'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('music_token')) {
+        next();
+      }else {
+        next('/login');
+      }
+    },
+    meta: {
+      title: '歌单管理',
+      needLogin: true,
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/Login'),
@@ -148,7 +161,15 @@ VueRouter.prototype.push = function(location, onResolve, onReject) {
 
 router.beforeEach( (to, from, next) => {
   document.title = '想听音乐🎧-' + to.meta.title;
-  next();
+  if (to.meta.needLogin) {
+    if (sessionStorage.getItem('music_token')) {
+      next();
+    }else {
+      next('/login');
+    }
+  }else {
+    next();
+  }
 })
 
 

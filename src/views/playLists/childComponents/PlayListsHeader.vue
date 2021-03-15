@@ -1,5 +1,5 @@
 <template>
-  <header v-show="cate.length">
+  <header>
     <!--当前分类及排序选项 Start-->
     <div class="chose">
       <div class="chose-info"  @click="handleShowHideCateDetail">

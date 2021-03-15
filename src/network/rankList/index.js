@@ -6,3 +6,13 @@ export function getTopList() {
     method: 'get',
   });
 }
+
+export function getListDetail(id) {
+  return apiRequest({
+    url: '/playlist/detail',
+    method: 'get',
+    params: {
+      id
+    }
+  });
+}

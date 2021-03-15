@@ -21,6 +21,9 @@ export default {
   },
   filters: {
     decDesc(data) {
+      if (!data) {
+        return '';
+      }
       if (data.length < 200) {
         return data;
       }else {

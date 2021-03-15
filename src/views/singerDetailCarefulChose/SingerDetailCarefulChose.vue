@@ -1,7 +1,7 @@
 <template>
   <div class="singer-detail-careful-chose">
     <song-info v-if="songs.length && !this.$store.state.isLoading" :song-infos="songs"></song-info>
-    <loading v-show="this.$store.state.isLoading"></loading>
+    <loading v-if="this.$store.state.isLoading"></loading>
     <no-music v-if="!songs.length && !this.$store.state.isLoading"></no-music>
   </div>
 </template>

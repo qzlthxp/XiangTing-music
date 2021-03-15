@@ -1,5 +1,5 @@
 <template>
-  <div class="singer-detail-header" v-if="Object.keys(detailInfo).length">
+  <div class="singer-detail-header">
     <div class="singer-photo">
       <img :src="detailInfo.artist.cover" alt="歌手图片" />
     </div>

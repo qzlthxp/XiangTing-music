@@ -1,14 +1,20 @@
 <template>
   <div class="play-lists">
-    <play-lists-header :cate="cate" @getHot="getHotLists" @getCurrentLists="getCurrentLists"></play-lists-header>
+    <play-lists-header
+        v-if="cate.length"
+        :cate="cate"
+        @getHot="getHotLists"
+        @getCurrentLists="getCurrentPlayLists"
+    >
+    </play-lists-header>
     <main>
       <play-lists-over-view
-          v-show="playLists.length && !this.$store.state.isLoading"
+          v-if="playLists.length && !this.$store.state.isLoading"
           :playListsInfos="playLists"
       >
       </play-lists-over-view>
-      <loading v-show="this.$store.state.isLoading"></loading>
-      <no-music v-show="!playLists.length && !this.$store.state.isLoading"></no-music>
+      <loading v-if="this.$store.state.isLoading"></loading>
+      <no-music v-if="!playLists.length && !this.$store.state.isLoading"></no-music>
     </main>
   </div>
 </template>
@@ -42,7 +48,7 @@ export default {
   methods: {
     async getAllCate() {
       try {
-        this.cate = await getCate();
+        this.cate = (await getCate()).data;
       }catch (e) {
         return e;
       }
@@ -50,7 +56,7 @@ export default {
     async getHotLists() {
       try {
         await this.$store.commit('showLoading');
-        this.playLists = quickSortPlayLists(await getHotPlayLists());
+        this.playLists = quickSortPlayLists((await getHotPlayLists()).data);
         await this.$store.commit('hideLoading');
       }catch (e) {
         return e;
@@ -59,15 +65,12 @@ export default {
     async getCurrentPlayLists(id) {
       try {
         await this.$store.commit('showLoading');
-        this.playLists = await getPlayLists(id);
+        this.playLists = (await getPlayLists(id)).data;
         await this.$store.commit('hideLoading');
       }catch (e) {
         return e;
       }
     },
-    getCurrentLists(id) {
-      this.getCurrentPlayLists(id);
-    }
   }
 }
 </script>

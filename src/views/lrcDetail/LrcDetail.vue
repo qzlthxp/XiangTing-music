@@ -4,9 +4,15 @@
       <lrc-detail-left :epInfo="epInfo"></lrc-detail-left>
     </div>
     <div class="right" v-if="Object.keys(songInfo).length">
-      <lrc-detail-right :epInfo="epInfo" :songInfo="songInfo"></lrc-detail-right>
+      <lrc-detail-right
+          :epInfo="epInfo"
+          :songInfo="songInfo"
+          @playThis="playThis"
+          @addThis="addThis"
+      >
+      </lrc-detail-right>
       <div class="lrc-similar" v-if="Object.keys(lrc).length">
-        <lrc :lrc="lrc"></lrc>
+        <lrc v-if="Object.keys(lrc).length" :lrc="lrc"></lrc>
         <similar-song v-if="similarSongs.length" :similar-songs="similarSongs"></similar-song>
       </div>
     </div>
@@ -20,6 +26,8 @@ import Lrc from "@/views/lrcDetail/childrenComponents/Lrc";
 import SimilarSong from "@/views/lrcDetail/childrenComponents/SimilarSong";
 import {getSongDesc ,getLrc, getSimiSong} from "@/network/lrcDetail";
 import {getEp} from "@/network/epDetail";
+import {formatLrc} from "@/common/utils";
+
 export default {
   name: "LrcDetail",
   data() {
@@ -90,24 +98,7 @@ export default {
     },
     async getLrcInfo() {
       try {
-        let lrc = (await getLrc(this.$route.params.song_id)).lrc.lyric;
-        let lyrics = lrc.split("\n");//lrc代表歌词文件内容的引用
-        let lrcObj = {};
-        for(let i = 0; i < lyrics.length; i++ ){
-          let lyric = decodeURIComponent(lyrics[i]);
-          let timeReg = /\[\d*:\d*((\.|\:)\d*)*\]/g;
-          let timeRegExpArr = lyric.match(timeReg);
-          if(!timeRegExpArr)continue;
-          let clause = lyric.replace(timeReg,'');
-          for(let k = 0,h = timeRegExpArr.length;k < h;k++) {
-            let t = timeRegExpArr[k];
-            let min = Number(String(t.match(/\[\d*/i)).slice(1)),
-                sec = Number(String(t.match(/\:\d*/i)).slice(1));
-            let time = min * 60 + sec;
-            lrcObj[time] = clause;
-          }
-        }
-        this.lrc = lrcObj;
+        this.lrc = formatLrc((await getLrc(this.$route.params.song_id)).lrc.lyric);
       }catch (e) {
         return e;
       }
@@ -118,6 +109,31 @@ export default {
       }catch (e) {
         return e;
       }
+    },
+    playThis() {
+      let obj = {
+        id: this.songInfo.id,
+        singer_info: this.songInfo.ar,
+        song_name: this.songInfo.name,
+        song_url: `https://music.163.com/song/media/outer/url?id=${this.songInfo.id}.mp3`,
+        al: this.songInfo.al,
+        type: this.songInfo.type,
+      };
+      let num = null;
+      this.$store.state.song.songList.forEach( (value, index) => {
+        if (value.id === this.songInfo.id) {
+          num = index;
+        }
+      });
+      if (num) {
+        this.$bus.$emit('play-this-song', num);
+      }else {
+        this.$store.commit('addSongListByUnShift', obj);
+        this.$bus.$emit('play-first-song');
+      }
+    },
+    addThis() {
+      console.log(this.songInfo);
     }
   }
 }

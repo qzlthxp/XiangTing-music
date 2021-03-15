@@ -1,7 +1,11 @@
 <template>
   <div class="rank-list-left">
     <ul>
-      <li class="list-item" v-for="(item,index) in list" :key="index">
+      <li class="list-item"
+          v-for="(item,index) in list"
+          :key="index"
+          @click="listItemClick(index)"
+      >
         <img class="list-cover-img" :src="item.coverImgUrl" alt="排行榜图片" />
         <p class="list-name">{{item.name}}</p>
       </li>
@@ -18,6 +22,17 @@ export default {
       default() {
         return [];
       }
+    }
+  },
+  mounted() {
+    this.listItemClick(0);
+  },
+  methods: {
+    listItemClick(index) {
+      this.$emit('leftClick', {
+        title: this.list[index].name,
+        id: this.list[index].id,
+      });
     }
   }
 }

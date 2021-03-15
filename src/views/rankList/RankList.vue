@@ -1,25 +1,38 @@
 <template>
   <div class="rank-list">
     <div class="left" v-if="list.length">
-      <rank-list-left :list="list"></rank-list-left>
+      <rank-list-left :list="list" @leftClick="leftClick"></rank-list-left>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <div class="content">
+        <h1>{{title}}</h1>
+        <song-info v-if="songs.length" :song-infos="songs"></song-info>
+      </div>
+      <loading v-if="isLoading"></loading>
+    </div>
   </div>
 </template>
 
 <script>
 import RankListLeft from "@/views/rankList/childComponents/RankListLeft";
-import {getTopList} from "@/network/rankList";
+import SongInfo from "@/components/content/songInfo/SongInfo";
+import Loading  from "@/components/common/loading/Loading";
+import {getTopList, getListDetail} from "@/network/rankList";
 
 export default {
   name: "RankList",
   data() {
     return {
       list: [],
+      songs: [],
+      title: '',
+      isLoading: false,
     }
   },
   components: {
-    RankListLeft
+    RankListLeft,
+    SongInfo,
+    Loading
   },
   created() {
     this.getRank();
@@ -32,6 +45,19 @@ export default {
         return e;
       }
     },
+    async getList(id) {
+      try {
+        this.isLoading = true;
+        this.songs= (await getListDetail(id)).playlist.tracks;
+        this.isLoading = false;
+      }catch (e) {
+        return e;
+      }
+    },
+    leftClick(obj) {
+      this.title = obj.title;
+      this.getList(obj.id);
+    }
   }
 }
 </script>
@@ -49,6 +75,7 @@ export default {
   .right{
     width: calc(100% - 250px);
     padding-left: 50px;
+    position: relative;
   }
 
 </style>

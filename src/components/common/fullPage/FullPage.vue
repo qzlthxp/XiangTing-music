@@ -48,8 +48,11 @@ export default {
   methods: {
     //getHeight
     initContainer() {
-      this.pageCount = this.$refs.container.childElementCount;
-      this.$refs.container.style.height = document.documentElement.clientHeight + 'px';
+      this.isScrolling = false;
+      if (this.$refs.container.childElementCount) {
+        this.pageCount = this.$refs.container.childElementCount;
+        this.$refs.container.style.height = document.documentElement.clientHeight + 'px';
+      }
     },
     // 鼠标滚轮事件
     getWheelDelta(event) {
@@ -62,12 +65,15 @@ export default {
     },
     // 鼠标滚动逻辑（全屏滚动关键逻辑）
     scrollMouse(event) {
-      this.isScrolling = false;
-      let delta = this.getWheelDelta(event);
-      if (delta < 0) {
-        this.goDown();
-      } else {
-        this.goUp();
+      if (!this.isScrolling) {
+        let delta = this.getWheelDelta(event);
+        if (delta < 0) {
+          this.isScrolling = true;
+          this.goDown();
+        }else {
+          this.isScrolling = true;
+          this.goUp();
+        }
       }
     },
     //当前页码增加
@@ -84,32 +90,40 @@ export default {
         this.currentPage = 0;
       }
     },
-    //鼠标往前滚动，显示页面下方内容
+    //鼠标往前滚动
     goUp() {
-      if (this.$refs.container && this.$refs.container.offsetTop !== 0 && !this.isScrolling && !this.$store.state.scrolling) {
+      if (this.$refs.container && this.$refs.container.offsetTop < 0) {
         this.currentPageDec();
         let top = this.$refs.container.offsetTop + this.$refs.container.clientHeight;
         this.$refs.container.style.top = `${top}px`;
-        this.isScrolling = true;
+        setTimeout( () => {
+          this.isScrolling = false;
+        }, 510);
       }
     },
-    //鼠标往后滚动，显示页面上方内容
+    //鼠标往后滚动
     goDown() {
       if (this.$refs.container) {
-        let alreadyNum = Math.abs(this.$refs.container.offsetTop / this.$refs.container.clientHeight && !this.$store.state.scrolling);
+        let alreadyNum = Math.abs(this.$refs.container.offsetTop / this.$refs.container.clientHeight);
         let childCountNum = this.$refs.container.childElementCount;
-        if (alreadyNum + 1 < childCountNum && !this.isScrolling) {
+        if (alreadyNum + 1 < childCountNum) {
           this.currentPageAdd();
           let top = this.$refs.container.offsetTop - this.$refs.container.clientHeight;
           this.$refs.container.style.top = `${top}px`;
-          this.isScrolling = true;
+          setTimeout( () => {
+            this.isScrolling = false;
+          }, 510);
         }
       }
     },
     //通过分页器跳转
     topPage(index) {
+      this.isScrolling = true;
       this.currentPage = index;
-      this.$refs.container.style.top = `${index * Math.abs(this.$refs.container.clientHeight) * -1}px`
+      this.$refs.container.style.top = `${index * Math.abs(this.$refs.container.clientHeight) * -1}px`;
+      setTimeout( () => {
+        this.isScrolling = false;
+      }, 510);
     }
   }
 }
@@ -143,7 +157,7 @@ export default {
     margin: 10px 0;
     border-radius: 100%;
     background-color: #000;
-    transition: .25s cubic-bezier(.19,1,.22,1);
+    transition: .5s cubic-bezier(.19,1,.22,1);
     cursor: pointer;
   }
   .pager-item:hover,

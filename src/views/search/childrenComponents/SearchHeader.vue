@@ -1,6 +1,6 @@
 <template>
   <div class="search-header">
-    <div class="img-box" @mousemove="bgMove($event)">
+    <div class="img-box">
       <img class="bg" ref="bg" src="https://y.gtimg.cn/mediastyle/yqq/img/bg_singer.jpg" alt="搜索页背景" />
     </div>
     <div class="search-box">
@@ -72,10 +72,6 @@ export default {
     }
   },
   methods: {
-    bgMove($event) {
-      let moved = $event.offsetX / $event.target.offsetWidth;
-      this.$refs.bg.style.transform = `translateX(${(0.5 - moved) * 100}px)`;
-    },
     showDropDownList() {
       this.DropDownListIsShow = !this.DropDownListIsShow;
       if (this.DropDownListIsShow) {
@@ -105,7 +101,7 @@ export default {
 <style scoped>
   .search-header{
     width: 100%;
-    height: 200px;
+    height: 250px;
     position: relative;
   }
   .img-box{

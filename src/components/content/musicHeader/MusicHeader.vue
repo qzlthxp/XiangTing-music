@@ -242,7 +242,7 @@ export default {
       return isAllowType && isLt5M;
     },
     handleAvatarSuccess(response) {
-      let res = response[0];
+      let res = response;
       this.$toasted.show(res.message);
     },
     toSingerDetail(id) {

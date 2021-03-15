@@ -1,6 +1,6 @@
 <template>
   <div class="singer-detail-ep">
-    <ep-info v-show="eps.length" :eps-info="eps"></ep-info>
+    <ep-info v-if="eps.length" :eps-info="eps"></ep-info>
   </div>
 </template>
 

@@ -22,7 +22,7 @@
         <span class="icon"><i class="fa fa-user-o fa-fw"></i></span>
         <span>个人中心</span>
       </div>
-      <div class="content">
+      <div class="content" @click="toPlayListsManage">
         <span class="icon"><i class="fa fa-th-list fa-fw"></i></span>
         <span>我的歌单</span>
       </div>
@@ -67,6 +67,9 @@ export default {
     },
     ToUser(index) {
       this.$router.push({path: `/music_main/user/${this.$store.state.user.userInfo.user_id}`, query: {type: this.userLike[index].type}});
+    },
+    toPlayListsManage() {
+      window.open('/#/playlists_manage', '_blank');
     }
   }
 }

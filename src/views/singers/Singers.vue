@@ -18,13 +18,13 @@
     <main>
       <!--歌手展示 Start-->
       <singers-over-view
-          v-show="singersInfo.length && !this.$store.state.isLoading"
+          v-if="singersInfo.length && !this.$store.state.isLoading"
           :Infos="singersInfo"
       >
       </singers-over-view>
       <!--歌手展示 End-->
-      <loading v-show="this.$store.state.isLoading"></loading>
-      <no-singer v-show="!singersInfo.length && !this.$store.state.isLoading"></no-singer>
+      <loading v-if="this.$store.state.isLoading"></loading>
+      <no-singer v-if="!singersInfo.length && !this.$store.state.isLoading"></no-singer>
     </main>
   </div>
 </template>

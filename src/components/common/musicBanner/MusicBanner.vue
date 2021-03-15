@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import {swiper, swiperSlide} from 'vue-awesome-swiper';
 import {banner} from "@/network/home";
 
 export default {
@@ -51,10 +50,6 @@ export default {
       },
       swiperList: []
     }
-  },
-  components: {
-    swiper,
-    swiperSlide
   },
   created() {
     this.getBanner();

@@ -43,10 +43,11 @@ export default {
     ...mapMutations(['saveUser','saveLikeSinger','saveLikeSong','saveLikePlayLists']),
     async ToLogin(payload) {
       try {
-        let res = (await Login(payload))[0];
+        let res = await Login(payload);
         if (res.status) {
           await this.saveUser(res);
           await localStorage.setItem('music_token', res.user_token);
+          await sessionStorage.setItem('music_token', res.user_token);
           await this.$router.replace('/');
           await this.getUserLike(res.user_id);
         }else {
@@ -58,7 +59,7 @@ export default {
     },
     async ToRegister(payload) {
       try {
-        let res = (await Register(payload))[0];
+        let res = await Register(payload);
         if (res.status) {
           await this.$message({
             message: '注册成功',
@@ -75,11 +76,11 @@ export default {
     async getUserLike(userId) {
       try {
         let SingerVal = await getUserLikeSinger(userId);
-        await this.saveLikeSinger(SingerVal);
+        await this.saveLikeSinger(SingerVal.singers);
         let SongVal = await getUserLikeSong(userId);
-        await this.saveLikeSong(SongVal);
+        await this.saveLikeSong(SongVal.songs);
         let PlayListsVal = await getUserLikePlayLists(userId);
-        await this.saveLikePlayLists(PlayListsVal);
+        await this.saveLikePlayLists(PlayListsVal.playLists);
       }catch (e) {
         return e;
       }

@@ -1,11 +1,11 @@
 <template>
   <div class="singer-detail">
     <!--查找到该歌手信息展示 Start-->
-    <singer-detail-header :detailInfo="detailInfo"></singer-detail-header>
+    <singer-detail-header v-if="Object.keys(detailInfo).length" :detailInfo="detailInfo"></singer-detail-header>
     <singer-detail-main></singer-detail-main>
     <section class="router-view-section">
       <router-view></router-view>
-      <similar-singer :similar-singers="similarSingers"></similar-singer>
+      <similar-singer v-if="similarSingers.length" :similar-singers="similarSingers"></similar-singer>
     </section>
     <!--查找到该歌手信息展示 End-->
   </div>

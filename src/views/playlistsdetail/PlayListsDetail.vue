@@ -1,31 +1,31 @@
 <template>
   <div class="play-lists-detail">
-    <div v-if="playListsInfo.length" class="left">
+    <div v-if="Object.keys(playListsInfo).length" class="left">
       <!--歌单封面 Start-->
-      <img class="play-lists-poster" :src="playListsInfo[0].play_lists_poster" alt="">
+      <img class="play-lists-poster" :src="playListsInfo.play_lists_poster" alt="">
       <!--歌单封面 End-->
 
       <!--收藏 Start-->
       <button v-show="!isCollected" class="collect-play-lists" @click="addLikePlayLists">
-        <span><i class="fa fa-heart-o fa-fw"></i></span>
+        <span><i class="fa fa-star-o fa-fw"></i></span>
         <span>收藏歌单</span>
       </button>
       <button v-show="isCollected" class="collect-play-lists collected" @click="removeLikePlayLists">
-        <span><i class="fa fa-heart fa-fw"></i></span>
+        <span><i class="fa fa-star fa-fw"></i></span>
         <span>歌单以收藏</span>
       </button>
       <!--收藏 End-->
 
       <!--简介 Start-->
-      <p><span style="font-weight: bold">简介：</span><span>{{playListsInfo[0].play_lists_introduce}}</span></p>
+      <p><span style="font-weight: bold">简介：</span><span>{{playListsInfo.play_lists_introduce}}</span></p>
       <!--简介 End-->
     </div>
 
-    <div v-if="playListsInfo.length" class="right">
-      <p class="play-lists-title">{{playListsInfo[0].play_lists_title}}</p>
+    <div v-if="Object.keys(playListsInfo).length" class="right">
+      <p class="play-lists-title">{{playListsInfo.play_lists_title}}</p>
       <div class="user-info">
-        <img class="user-photo" :src="playListsInfo[0].user_photo" alt="用户头像" />
-        <span class="user-name" @click="ToUser(playListsInfo[0].user_id)">{{playListsInfo[0].user_name}}</span>
+        <img class="user-photo" :src="playListsInfo.user_photo" alt="用户头像" />
+        <span class="user-name" @click="ToUser(playListsInfo.user_id)">{{playListsInfo.user_name}}</span>
       </div>
       <p class="publish-time"><span>发布日期：</span><span>{{issueDate}}</span></p>
       <song-info v-if="songsInfo.length" :song-infos="songsInfo"></song-info>
@@ -45,7 +45,7 @@ export default {
   name: "PlayListsDetail",
   data() {
     return {
-      playListsInfo: [],
+      playListsInfo: {},
       songsInfo: [],
     }
   },
@@ -54,7 +54,7 @@ export default {
       return this.$store.state.user.playListsUserLike.length ? this.$store.state.user.playListsUserLike.some(value => `${value}` === this.$route.params.play_lists_id) : false;
     },
     issueDate() {
-      return formatDate(this.playListsInfo[0].publishTime);
+      return formatDate(this.playListsInfo.publishTime);
     }
   },
   components: {
@@ -74,11 +74,7 @@ export default {
     },
     async getPlayListsSongs() {
       try {
-        let res = await getSongsByPlayListsId(this.$route.params.play_lists_id);
-        let songs = [];
-        res.forEach( value => {
-          songs.push(value.song_id);
-        });
+        let songs = (await getSongsByPlayListsId(this.$route.params.play_lists_id)).songs;
         this.songsInfo = (await getSongDesc(songs.join(','))).songs;
       }catch (e) {
         return e;

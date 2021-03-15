@@ -33,9 +33,9 @@
       </div>
       <div class="btn">
         <el-button class="text-btn" type="text" @click="showDetailContent">
-          <span v-show="!detailIsShow"><i class="fa fa-angle-down fa-fw"></i></span>
-          <span v-show="detailIsShow"><i class="fa fa-angle-up fa-fw"></i></span>
-          <span style="color: var(--default-i-color)">查看隐藏信息</span>
+          <span v-show="!detailIsShow"><i class="fa fa-angle-down fa-fw"  style="color: var(--default-i-color)"></i></span>
+          <span v-show="detailIsShow"><i class="fa fa-angle-up fa-fw"  style="color: var(--default-i-color)"></i></span>
+          <span  style="color: var(--default-i-color)">查看隐藏信息</span>
         </el-button>
         <!--修改信息 Start-->
         <el-button v-if="isMe" class="update-info" @click="showDialogVisible(); getUser()">
@@ -174,7 +174,7 @@ export default {
   methods: {
     async getUser() {
       try {
-        let res = (await getAllUserInfo(this.$store.state.user.userInfo.user_id))[0];
+        let res = await getAllUserInfo(this.$store.state.user.userInfo.user_id);
         this.allUserInfo = res;
         this.ruleForm.name = res.user_name;
         this.ruleForm.phone = res.user_phone;
@@ -185,13 +185,13 @@ export default {
     },
     async updateInfo() {
       try {
-        let res = (await updateAlUserInfo({
+        let res = await updateAlUserInfo({
           'user_id': this.$store.state.user.userInfo.user_id,
           'user_name': this.ruleForm.name,
           'user_phone': this.ruleForm.phone,
           'user_qming': this.ruleForm.qming,
           'user_photo': this.info.user_photo.match(/\/user_upload_photo.*/)[0],
-        }))[0];
+        });
         if (res.status) {
           await this.$toasted.show(res.message);
           await (
@@ -221,7 +221,7 @@ export default {
       if (this.detailIsShow) {
         this.$refs.detailContent.style.height = "0";
       }else {
-        this.$refs.detailContent.style.height = "25px";
+        this.$refs.detailContent.style.height = "50px";
       }
       this.detailIsShow = !this.detailIsShow;
     },
@@ -237,7 +237,7 @@ export default {
       return isAllowType && isLt2M;
     },
     handleAvatarSuccess(response) {
-      let res = response[0];
+      let res = response;
       if (res.status) {
         this.$toasted.show(res.message);
         this.$emit('updateBg', res.user_bg);
@@ -246,7 +246,7 @@ export default {
       }
     },
     handleAvatarPhotoSuccess(response) {
-      let res = response[0];
+      let res = response;
       if (res.status) {
         this.$toasted.show(res.message);
         this.$emit('updatePhoto', res.user_photo);
@@ -312,7 +312,7 @@ export default {
   }
   .info{
     width: 100%;
-    padding: 0 20px 10px 158px;
+    padding: 0 20px 20px 158px;
     position: relative;
     display: flex;
     flex-flow: column nowrap;
@@ -324,6 +324,13 @@ export default {
     height: 0;
     overflow: hidden;
     transition: height .25s ease-in-out;
+  }
+  .info .detail-content p{
+    width: 100%;
+    line-height: 50px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .info .btn{
     width: 100%;

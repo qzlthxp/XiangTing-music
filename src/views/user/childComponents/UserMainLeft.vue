@@ -6,7 +6,7 @@
         @click="changeType(index)"
     >
       <span class="icon">
-        <i :class="item.class"></i>
+        <i :class="item.class" :style="'color:' + item.color + ';'"></i>
       </span>
       <span v-if="isMe">{{item.nameIsMe}}</span>
       <span v-if="!isMe">{{item.nameNoMe}}</span>

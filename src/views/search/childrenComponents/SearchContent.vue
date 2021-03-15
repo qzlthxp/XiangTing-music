@@ -1,9 +1,9 @@
 <template>
   <div class="search-content">
-    <song-info v-show="type === 1 && songInfo.length" :song-infos="songInfo"></song-info>
-    <singers-over-view v-show="type === 100 && Infos.length" :Infos="Infos"></singers-over-view>
-    <ep-info v-show="type === 10 && epsInfo.length" :eps-info="epsInfo"></ep-info>
-    <no-collect v-show="(type === 1 && !songInfo.length) || (type === 100 && !Infos.length) || (type === 10 && !epsInfo.length)"></no-collect>
+    <song-info v-if="type === 1 && songInfo.length" :song-infos="songInfo"></song-info>
+    <singers-over-view v-if="type === 100 && Infos.length" :Infos="Infos"></singers-over-view>
+    <ep-info v-if="type === 10 && epsInfo.length" :eps-info="epsInfo"></ep-info>
+    <no-collect v-if="(type === 1 && !songInfo.length) || (type === 100 && !Infos.length) || (type === 10 && !epsInfo.length)"></no-collect>
   </div>
 </template>
 

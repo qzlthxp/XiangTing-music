@@ -129,3 +129,13 @@ export function updateAlUserInfo(payload) {
     }
   });
 }
+
+export function getOwn(id) {
+  return request({
+    url: '/songs_by_user_id',
+    method: 'get',
+    params: {
+      user_id: id,
+    }
+  })
+}

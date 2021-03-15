@@ -1,5 +1,5 @@
 <template>
-  <div class="song-info" v-if="songInfos.length">
+  <div class="song-info" v-if="songs.length">
     <button class="play-all" @click="playAll">
       <span>
         <i class="fa fa-play"></i>
@@ -85,32 +85,21 @@ export default {
       }
     },
     songs() {
-      let arr = [];
-      if (this.songInfos.length) {
-        console.log(this.songInfos);
-        this.songInfos.forEach( (value) => {
-          if (value.ar.length === 1) {
-            let obj = {
-              id: value.id,
-              singer_id: value.ar[0].id,
-              singer_name: value.ar[0].name,
-              song_name: value.name,
-              song_url: `https://music.163.com/song/media/outer/url?id=${value.id}.mp3`,
-              al: value.al,
-              type: value.type,
-            }
-            arr.push(obj);
-          }
-        });
-      }
-      return arr;
-    }
-  },
-  watch: {
-    songInfos: {
-      deep: true,
-      handler(newVal) {
-        this.songInfos = newVal;
+      if (!this.songInfos.length) {
+        return [];
+      }else {
+        const arr = [];
+        for (let value of this.songInfos) {
+          arr.push({
+            id: value.id,
+            singer_info: value.ar,
+            song_name: value.name,
+            song_url: `https://music.163.com/song/media/outer/url?id=${value.id}.mp3`,
+            al: value.al,
+            type: value.type,
+          });
+        }
+        return arr;
       }
     }
   },
@@ -187,6 +176,7 @@ export default {
   }
   .play-all,
   .add-all{
+    min-width: 100px;
     margin: 25px 25px 25px 0;
     padding: 5px 10px;
     border: none;

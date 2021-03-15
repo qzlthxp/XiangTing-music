@@ -24,12 +24,11 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    min-height: 100px;
+    padding: 50px 0;
     background-color: #fff;
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 5;
+    align-items: flex-start;
     overflow: hidden;
   }
   .spinner {

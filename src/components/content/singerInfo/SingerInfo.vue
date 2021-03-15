@@ -5,13 +5,13 @@
           :key="index"
       >
         <div class="singer-photo">
-          <img :src="item.singer_photo" alt="专辑封面">
+          <img :src="item.artist.cover" alt="专辑封面">
         </div>
         <div class="singer-name">
-          <p :title="item.singer_name" @click="ToSingerDetail(index)">{{item.singer_name}}</p>
+          <p :title="item.artist.name" @click="ToSingerDetail(index)">{{item.artist.name}}</p>
         </div>
         <div class="singer_introduce">
-          <p :title="item.singer_info">{{item.singer_info}}</p>
+          <p :title="item.artist.briefDesc">{{item.artist.briefDesc}}</p>
         </div>
         <div class="state">
           <el-button
@@ -49,26 +49,23 @@ export default {
   computed: {
     isCollected() {
       return index => {
-        return this.$store.state.user.singerUserLike.some(value => value === this.singerInfos[index].singer_id);
+        return this.$store.state.user.singerUserLike.some(value => value === this.singerInfos[index].artist.id);
       }
     }
   },
-  created() {
-
-  },
   methods: {
     ToSingerDetail(index) {
-      this.$router.push('/music_main/singer_detail/' + this.singerInfos[index].singer_id +'/careful_chose');
+      this.$router.push('/music_main/singer_detail/' + this.singerInfos[index].artist.id +'/careful_chose');
     },
     cancelFollow(index) {
       this.$store.dispatch('likeSingerIsDec', {
-        'singer_id': this.singerInfos[index].singer_id,
+        'singer_id': this.singerInfos[index].artist.id,
         'this': this,
       });
     },
     follow(index) {
       this.$store.dispatch('likeSingerIsAdd', {
-        'singer_id': this.singerInfos[index].singer_id,
+        'singer_id': this.singerInfos[index].artist.id,
         'this': this,
       });
     }
@@ -108,6 +105,9 @@ export default {
     width: 500px;
     color: #999;
     line-height: 80px;
+  }
+  .singer_introduce p{
+    width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

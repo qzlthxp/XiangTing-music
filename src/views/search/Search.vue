@@ -3,7 +3,7 @@
     <search-header @getMore="getMore"></search-header>
     <main>
       <search-content
-          v-show="Object.keys(searchRes).length"
+          v-if="Object.keys(searchRes).length"
           :search-res="searchRes"
           :type="type"
       >
@@ -70,7 +70,6 @@ export default {
       try {
         this.type = obj.type;
         this.searchRes = (await searchMore(obj)).result;
-        console.log(this.searchRes);
       }catch (e) {
         return e;
       }
@@ -83,13 +82,13 @@ export default {
   .search{
     width: 100%;
     height: auto;
-    padding: 80px 0;
+    padding: 80px 0 0;
     position: relative;
   }
   main{
     width: 100%;
     height: auto;
-    padding: 80px var(--default-padding);
+    padding: 80px var(--default-padding) 0;
     position: relative;
   }
 </style>

@@ -1,12 +1,14 @@
 <template>
   <div class="main-right">
     <h1>{{this.title}}</h1>
-    <song-info v-show="type === 'song' && rightData.length" :song-infos="Infos[defaultPage[type]]"></song-info>
-    <no-music v-show="type === 'song' && !rightData.length"></no-music>
-    <singer-info v-show="type === 'singer' && rightData.length" :singer-infos="Infos[defaultPage[type]]"></singer-info>
-    <no-singer v-show="type === 'singer' && !rightData.length"></no-singer>
-    <play-lists-info v-show="type === 'playLists' && rightData.length" :play-lists-infos="Infos[defaultPage[type]]"></play-lists-info>
-    <no-collect v-show="type === 'playLists' && !rightData.length"></no-collect>
+    <song-info v-if="type === 'songs' && rightData.length" :song-infos="Infos[defaultPage[type]]"></song-info>
+    <no-music v-if="type === 'songs' && !rightData.length"></no-music>
+    <singer-info v-if="type === 'singers' && rightData.length" :singer-infos="Infos[defaultPage[type]]"></singer-info>
+    <no-singer v-if="type === 'singers' && !rightData.length"></no-singer>
+    <play-lists-info v-if="type === 'playLists' && rightData.length" :play-lists-infos="Infos[defaultPage[type]]"></play-lists-info>
+    <no-collect v-if="type === 'playLists' && !rightData.length"></no-collect>
+    <own-info v-if="type === 'own' && rightData" :songs="Infos[defaultPage[type]]" v-bind="$attrs"></own-info>
+    <no-collect v-if="type === 'own' && !rightData.length"></no-collect>
     <div class="pagination">
       <el-pagination
           background
@@ -33,6 +35,7 @@ import NoCollect from "@/components/content/noRes/NoCollect";
 import SongInfo from "@/components/content/songInfo/SongInfo";
 import SingerInfo from "@/components/content/singerInfo/SingerInfo";
 import PlayListsInfo from "@/components/content/playListsInfo/PlayListsInfo";
+import OwnInfo from "@/components/content/ownInfo/OwnInfo";
 import {paging} from "@/common/utils";
 
 export default {
@@ -52,9 +55,10 @@ export default {
   data() {
     return {
       defaultPage: {
-        'song': 0,
-        'singer': 0,
+        'songs': 0,
+        'singers': 0,
         'playLists': 0,
+        'own': 0,
       },
       pageSize: 10,
     }
@@ -62,12 +66,14 @@ export default {
   computed: {
     title() {
       switch (this.type) {
-        case 'song':
+        case 'songs':
           return '歌曲';
-        case 'singer':
+        case 'singers':
           return '歌手';
         case 'playLists':
           return '歌单';
+        case 'own':
+          return '个人作品';
           default:
             return '';
       }
@@ -85,7 +91,11 @@ export default {
     PlayListsInfo,
     NoMusic,
     NoSinger,
-    NoCollect
+    NoCollect,
+    OwnInfo
+  },
+  mounted() {
+
   },
   methods: {
     handleCurrentChange(val) {
