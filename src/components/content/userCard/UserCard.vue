@@ -69,6 +69,7 @@ export default {
       this.$router.push({path: `/music_main/user/${this.$store.state.user.userInfo.user_id}`, query: {type: this.userLike[index].type}});
     },
     toPlayListsManage() {
+      sessionStorage.setItem('manage_user_id', this.$store.state.user.userInfo.user_id);
       window.open('/#/playlists_manage', '_blank');
     }
   }

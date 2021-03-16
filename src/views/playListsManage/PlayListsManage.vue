@@ -26,10 +26,12 @@
       <el-row>
         <p style="font-size: 2rem; margin: 0 0 var(--default-margin) 0">歌单管理</p>
       </el-row>
-      <el-button style="background-color: #409EFF; color: #fff">+ 新建歌单</el-button>
-      <el-button style="margin-left: 25px">删除选中</el-button>
+      <el-row style="margin-bottom: 25px">
+        <el-button style="background-color: #409EFF; color: #fff" @click="createNew">+ 新建歌单</el-button>
+        <el-button style="margin-left: 25px">删除选中</el-button>
+      </el-row>
       <el-table
-          stripe
+          v-if="tableData.length"
           :data="tableData"
           style="width: 100%"
           show-overflow-tooltip
@@ -43,9 +45,14 @@
             type="index"
             width="50">
         </el-table-column>
-        <el-table-column
-            type="play_lists_poster"
-            width="50">
+        <el-table-column label="封面" width="100">
+          <template slot-scope="scope">
+            <el-image
+                style="width: 80px; height: 80px"
+                :src="tableData[scope.$index].play_lists_poster"
+            >
+            </el-image>
+          </template>
         </el-table-column>
         <el-table-column
             prop="play_lists_title"
@@ -55,14 +62,15 @@
             prop="play_lists_introduce"
             label="简介">
         </el-table-column>
-        <el-table-column
-            prop="publishTime"
-            label="发布日期">
+        <el-table-column label="发布日期" width="100">
+          <template slot-scope="scope">
+            {{tableData[scope.$index].publishTime | formatDate}}
+          </template>
         </el-table-column>
         <el-table-column
             prop="play_number"
             label="播放数量"
-            width="180"
+            width="100"
         >
         </el-table-column>
         <el-table-column label="操作">
@@ -78,22 +86,37 @@
         </el-table-column>
       </el-table>
     </el-col>
+
+    <create v-show="showCreate"></create>
   </el-row>
 </template>
 
 <script>
+import Create from "@/views/playListsManage/childrenComponents/Create";
 import {getAllPlayLists} from "@/network/playlistsManage";
+import {formatDate} from "@/common/utils";
 
 export default {
   name: "PlayListsManage",
   data() {
     return {
+      info: {},
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+      showCreate: false,
     }
   },
+  filters: {
+    formatDate,
+  },
+  components: {
+    Create
+  },
   created() {
-    this.getUserAllPlayLists(this.$store.state.user.userInfo.user_id);
+    if (sessionStorage.getItem('manage_user_id')) {
+      let user_id = sessionStorage.getItem('manage_user_id');
+      this.getUserAllPlayLists(user_id);
+    }
   },
   methods: {
     async getUserAllPlayLists(id) {
@@ -103,6 +126,9 @@ export default {
       }catch (e) {
         return e;
       }
+    },
+    createNew() {
+      this.showCreate = true;
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
