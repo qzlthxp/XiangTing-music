@@ -9,3 +9,18 @@ export function getAllPlayLists(id) {
     }
   })
 }
+
+export function getCateManage() {
+  return request({
+    url: '/play_lists_cate_manage',
+    method: 'get',
+  });
+}
+
+export function create(obj) {
+  return request({
+    url: '/create_play_lists',
+    method: 'post',
+    data: obj,
+  })
+}

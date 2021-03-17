@@ -3,7 +3,13 @@
     <header>
       <h1 class="song-name">{{songInfo.name}}</h1>
       <p class="art-name">
-        <span @click="toSingerDetail(songInfo.ar[0].id)">{{songInfo.ar[0].name}}</span>
+        <span
+            v-for="(item,index) in songInfo.ar"
+            :key="index"
+            @click="toSingerDetail(item.id)"
+        >
+          {{item.name}}
+        </span>
       </p>
       <div class="ep-info">
         <p>

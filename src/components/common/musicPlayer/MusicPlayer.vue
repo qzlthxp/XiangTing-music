@@ -245,7 +245,7 @@ export default {
       currentSelectIndex: null,
       fit: 'cover',
       songName: '歌曲',
-      singerInfo: [],
+      singerInfo: [{name: '歌手', id: null}],
       modes: [
         {title: '循环播放', class: 'fa fa-repeat fa-lg fa-fw'},
         {title: '单曲循环', class: 'fa fa-retweet fa-lg fa-fw'},
@@ -454,6 +454,9 @@ export default {
     },
     //跳转到歌手详情页
     goSingerDetail(index) {
+      if (!this.singerInfo[index].id) {
+        return false;
+      }
       let singerId = this.singerInfo[index].id;
       if (!this.isUser) {
         this.$router.push('/music_main/singer_detail/' + singerId + '/careful_chose');
@@ -708,8 +711,7 @@ export default {
       this.$refs.domPoster.src = this.defaultPoster;
       this.$refs.domAudio.src = "";
       this.songName = '歌曲';
-      this.songName = '歌曲';
-      this.singerName = [];
+      this.singerInfo = [{name: '歌手', id: null}];
       this.isPlayed = false;
       this.totalTime = 0;
       this.currentTime = 0;

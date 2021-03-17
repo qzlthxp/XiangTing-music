@@ -87,23 +87,38 @@
       </el-table>
     </el-col>
 
-    <create v-show="showCreate"></create>
+    <create
+        v-show="showCreate"
+        :cate="cate"
+        @closeCreate="closeCreate"
+        @createPlayLists="createPlayLists"
+    >
+    </create>
   </el-row>
 </template>
 
 <script>
 import Create from "@/views/playListsManage/childrenComponents/Create";
-import {getAllPlayLists} from "@/network/playlistsManage";
+import {getAllPlayLists, getCateManage, create} from "@/network/playlistsManage";
 import {formatDate} from "@/common/utils";
 
 export default {
   name: "PlayListsManage",
   data() {
     return {
+      cate: [],
       info: {},
       tableData: [],
       multipleSelection: [],
       showCreate: false,
+    }
+  },
+  watch: {
+    tableDate: {
+      deep: true,
+      handler(newVal) {
+        this.tableData = newVal;
+      }
     }
   },
   filters: {
@@ -113,22 +128,44 @@ export default {
     Create
   },
   created() {
+    this.getAllCate();
     if (sessionStorage.getItem('manage_user_id')) {
       let user_id = sessionStorage.getItem('manage_user_id');
       this.getUserAllPlayLists(user_id);
     }
   },
   methods: {
+    async getAllCate() {
+      try {
+        this.cate = (await getCateManage()).data;
+      }catch (e) {
+        return e;
+      }
+    },
     async getUserAllPlayLists(id) {
       try {
         this.tableData = (await getAllPlayLists(id)).playLists;
-        console.log(this.tableData);
+      }catch (e) {
+        return e;
+      }
+    },
+    async CreateNewPlayLists(obj) {
+      try {
+        let res = await create(obj);
+        this.$toasted.show(res.message);
       }catch (e) {
         return e;
       }
     },
     createNew() {
       this.showCreate = true;
+    },
+    closeCreate() {
+      this.showCreate = false;
+    },
+    createPlayLists(obj) {
+      this.CreateNewPlayLists(obj);
+      this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

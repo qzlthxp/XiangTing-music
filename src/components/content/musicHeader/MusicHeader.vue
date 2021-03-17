@@ -280,6 +280,8 @@ header{
   width: 100%;
   height: 80px;
   padding: 10px var(--default-padding);
+  background-color: rgba(255,255,255, .5);
+  backdrop-filter: blur(2px);
   z-index: 9;
 }
 .container{

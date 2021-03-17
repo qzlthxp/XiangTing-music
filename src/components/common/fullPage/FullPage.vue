@@ -125,6 +125,13 @@ export default {
         this.isScrolling = false;
       }, 510);
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('mousewheel', debounceIIFE(this.scrollMouse, 500));
+    // firefox
+    window.removeEventListener("DOMMouseScroll", debounceIIFE(this.scrollMouse, 500));
+    //resize
+    window.removeEventListener('resize', debounce(this.initContainer, 500));
   }
 }
 </script>

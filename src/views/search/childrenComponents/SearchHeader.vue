@@ -1,7 +1,8 @@
 <template>
   <div class="search-header">
     <div class="img-box">
-      <img class="bg" ref="bg" src="https://y.gtimg.cn/mediastyle/yqq/img/bg_singer.jpg" alt="搜索页背景" />
+      <img class="bg" ref="bg" src="../../../assets/image/public/searchbg.jpg" alt="搜索页背景" />
+      <a class="from" href="https://www.pexels.com/zh-cn/">by Pexels</a>
     </div>
     <div class="search-box">
       <div class="search-icon" @click="showSearch">
@@ -108,12 +109,22 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
   }
   .bg{
-    min-width: 120%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .from{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: rgba(0,0,0,.5);
+    border-radius: var(--default-border-radius);
+    color: #fff;
   }
   .search-box{
     width: 600px;

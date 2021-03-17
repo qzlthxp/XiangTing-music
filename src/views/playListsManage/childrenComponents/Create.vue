@@ -3,7 +3,11 @@
     <div class="content">
       <div class="updatePoster">
         <el-image
-            style="width: 200px; height: 200px; border-radius: var(--default-border-radius); border: 1px solid var(--default-border-color)"
+            style="
+              width: 200px;
+              height: 200px;
+              border-radius: var(--default-border-radius);
+              border: 1px solid var(--default-border-color)"
             :src="posterInfo.showPath"
         >
         </el-image>
@@ -18,6 +22,48 @@
           <el-button style="margin-left: 20px">上传封面</el-button>
         </el-upload>
       </div>
+      <el-form ref="ruleForm" :model="form" :rules="rules"  label-width="80px">
+        <el-form-item label="歌单标题" prop="title">
+          <el-input v-model="form.title"></el-input>
+        </el-form-item>
+        <el-form-item label="歌单简介" prop="introduce">
+          <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              maxlength="250"
+              show-word-limit
+              v-model="form.introduce">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="是否公开">
+          <el-switch v-model="form.private"></el-switch>
+        </el-form-item>
+        <el-form-item label="选择分类">
+          <div v-for="(item,index) in cate" :key="index">
+            <p style="font-weight: bold">{{item.play_lists_main_cate_name}}</p>
+            <ul>
+              <el-checkbox-group
+                  v-model="checkedCate"
+                  :min="0"
+                  :max="3"
+              >
+                <el-checkbox
+                    v-for="(item, index) in item.secCate"
+                    :key="index"
+                    :label="item.play_lists_detail_cate_id"
+                >
+                  {{item.play_lists_detail_cate_name}}
+                </el-checkbox>
+              </el-checkbox-group>
+            </ul>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"  @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')">取消</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -25,10 +71,34 @@
 <script>
 export default {
   name: "Create",
+  props: {
+    cate: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
+  },
   data() {
     return {
       fileType: ['image/jpeg','image/jpg','image/gif','image/png'],
       posterInfo: {},
+      checkedCate: [],
+      form: {
+        title: '',
+        introduce: '',
+        private: false,
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入歌单标题', trigger: 'blur' },
+          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+        ],
+        introduce: [
+          { required: true, message: '请输入歌单简介', trigger: 'blur' },
+          { min: 3, max: 250, message: '长度在 3 到 250 个字符', trigger: 'blur' }
+        ],
+      }
     }
   },
   computed: {
@@ -53,6 +123,29 @@ export default {
     },
     handleAvatarPosterSuccess(response) {
       this.posterInfo = response;
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let obj = {
+            user_id: sessionStorage.getItem('manage_user_id'),
+            play_lists_detail_cate_ids: this.checkedCate,
+            title: this.form.title,
+            introduce: this.form.introduce,
+            poster: this.posterInfo.path,
+            publishTime: Date.now(),
+            private: this.form.private,
+          };
+          this.$emit('createPlayLists', obj);
+        } else {
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.posterInfo = {};
+      this.$emit('closeCreate');
     },
   }
 }
@@ -83,5 +176,6 @@ export default {
     display: flex;
     align-items: flex-end;
     width: 100%;
+    margin-bottom: 25px;
   }
 </style>
