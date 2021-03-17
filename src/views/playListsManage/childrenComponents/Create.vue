@@ -140,11 +140,15 @@ export default {
         } else {
           return false;
         }
+        this.$refs[formName].resetFields();
+        this.posterInfo = {};
+        this.checkedCate = [];
       });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.posterInfo = {};
+      this.checkedCate = [];
       this.$emit('closeCreate');
     },
   }

@@ -1,15 +1,11 @@
 <template>
-  <el-row style="width: 100%;min-width: 1440px;height: 100%;min-height: 100vh">
-    <el-col style="height: 100%" :span="4">
+  <div class="play-lists-manage">
+    <el-col :span="4">
       <el-menu
-          style="min-height: 100%"
           default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
-          @close="handleClose"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b">
+          @close="handleClose">
         <el-submenu index="1">
           <template slot="title">
             <i class="el-icon-location"></i>
@@ -28,7 +24,13 @@
       </el-row>
       <el-row style="margin-bottom: 25px">
         <el-button style="background-color: #409EFF; color: #fff" @click="createNew">+ 新建歌单</el-button>
-        <el-button style="margin-left: 25px">删除选中</el-button>
+        <el-popconfirm
+            style="margin-left: 25px"
+            title="这是一段内容确定删除吗？"
+            @confirm="handleDelAll"
+        >
+          <el-button slot="reference">删除选中</el-button>
+        </el-popconfirm>
       </el-row>
       <el-table
           v-if="tableData.length"
@@ -60,7 +62,8 @@
         </el-table-column>
         <el-table-column
             prop="play_lists_introduce"
-            label="简介">
+            label="简介"
+            width="350">
         </el-table-column>
         <el-table-column label="发布日期" width="100">
           <template slot-scope="scope">
@@ -75,18 +78,19 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-popconfirm
+                title="这是一段内容确定删除吗？"
+                @confirm="handleDelete(scope.$index, scope.row)"
+            >
+              <el-button
+                  size="mini"
+                  type="danger"
+                  slot="reference">删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
     </el-col>
-
     <create
         v-show="showCreate"
         :cate="cate"
@@ -94,12 +98,12 @@
         @createPlayLists="createPlayLists"
     >
     </create>
-  </el-row>
+  </div>
 </template>
 
 <script>
 import Create from "@/views/playListsManage/childrenComponents/Create";
-import {getAllPlayLists, getCateManage, create} from "@/network/playlistsManage";
+import {getAllPlayLists, getCateManage, create, delPlayLists} from "@/network/playlistsManage";
 import {formatDate} from "@/common/utils";
 
 export default {
@@ -110,6 +114,7 @@ export default {
       info: {},
       tableData: [],
       multipleSelection: [],
+      ids: [],
       showCreate: false,
     }
   },
@@ -117,7 +122,9 @@ export default {
     tableDate: {
       deep: true,
       handler(newVal) {
-        this.tableData = newVal;
+        this.$nextTick( () => {
+          this.tableData = newVal;
+        });
       }
     }
   },
@@ -149,9 +156,17 @@ export default {
         return e;
       }
     },
-    async CreateNewPlayLists(obj) {
+    async createNewPlayLists(obj) {
       try {
         let res = await create(obj);
+        this.$toasted.show(res.message);
+      }catch (e) {
+        return e;
+      }
+    },
+    async deletePlayLists(ids) {
+      try {
+        let res = await delPlayLists(ids);
         this.$toasted.show(res.message);
       }catch (e) {
         return e;
@@ -164,8 +179,11 @@ export default {
       this.showCreate = false;
     },
     createPlayLists(obj) {
-      this.CreateNewPlayLists(obj);
-      this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+      this.createNewPlayLists(obj);
+      this.closeCreate();
+      setTimeout( () => {
+        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+      }, 250);
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -176,16 +194,35 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    handleDelAll() {
+      this.multipleSelection.forEach( value => {
+        this.ids.push(value.play_lists_id);
+      });
+      this.deletePlayLists(this.ids);
+      this.multipleSelection = [];
+      setTimeout( () => {
+        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+      }, 250);
+    },
     handleEdit(index, row) {
       console.log(index, row);
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      this.ids.push(row.play_lists_id);
+      this.deletePlayLists(this.ids);
+      setTimeout( () => {
+        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+      }, 250);
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .play-lists-manage{
+    width: 100%;
+    min-width: 1440px;
+    min-height: 100vh;
+    overflow: auto;
+  }
 </style>

@@ -22,5 +22,15 @@ export function create(obj) {
     url: '/create_play_lists',
     method: 'post',
     data: obj,
+  });
+}
+
+export function delPlayLists(ids) {
+  return request({
+    url: '/delete_play_lists',
+    method: 'post',
+    params: {
+      ids
+    }
   })
 }

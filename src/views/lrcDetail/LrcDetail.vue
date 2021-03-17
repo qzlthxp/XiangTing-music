@@ -133,7 +133,7 @@ export default {
       }
     },
     addThis() {
-      console.log(this.songInfo);
+      console.log(this.songInfo.id);
     }
   }
 }

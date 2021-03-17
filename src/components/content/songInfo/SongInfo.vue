@@ -7,7 +7,7 @@
       <span style="margin-left: 10px">播放全部</span>
     </button>
 
-    <button class="add-all">
+    <button class="add-all" @click="addAll">
       <span>
         <i class="fa fa-plus"></i>
       </span>
@@ -56,7 +56,7 @@
             <i title="喜欢" v-show="!isLiked(index)" class="fa fa-heart-o fa-fw" @click="addLikeSong(index)"></i>
             <i title="取消喜欢" v-show="isLiked(index)" class="fa fa-heart activeLike fa-fw" @click="removeLikeSong(index)"></i>
           </span>
-          <span title="加入歌单"><i class="fa fa-plus fa-fw"></i></span>
+          <span title="加入歌单"><i class="fa fa-plus fa-fw" @click="addThis(index)"></i></span>
         </div>
       </li>
     </ul>
@@ -131,6 +131,16 @@ export default {
     playAll() {
       this.$store.commit('addSongListAllSong',this.songs);
       this.$bus.$emit('play-first-song');
+    },
+    addAll() {
+      let songs = [];
+      this.songInfos.forEach( value => {
+        songs.push(value.id);
+      });
+      console.log(songs);
+    },
+    addThis(index) {
+      console.log(this.songInfos[index].id);
     },
     addLikeSong(index) {
       if (!this.$store.state.user.userInfo.user_token) {

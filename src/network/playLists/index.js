@@ -23,3 +23,25 @@ export function getPlayLists(playListsDetailId) {
     }
   })
 }
+
+export function addOne(obj) {
+  return request({
+    url: '/play_lists_add_song_one',
+    method: 'post',
+    params: {
+      song_id: obj.song_id,
+      play_lists_id: obj.play_lists_id,
+    }
+  });
+}
+
+export function addMany(obj) {
+  return request({
+    url: '/play_lists_add_song_many',
+    method: 'post',
+    params: {
+      songs: obj.songs,
+      play_lists_id: obj.play_lists_id,
+    }
+  });
+}
