@@ -44,8 +44,8 @@ export default {
     return {
       fit: 'cover',
       userLike: [
-        {name: '喜欢', number: 'songUserLike', type: 'song'},
-        {name: '关注', number: 'singerUserLike', type: 'singer'},
+        {name: '喜欢', number: 'songUserLike', type: 'songs'},
+        {name: '关注', number: 'singerUserLike', type: 'singers'},
         {name: '收藏', number: 'playListsUserLike', type: 'playLists'},
       ]
     }

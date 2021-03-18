@@ -27,21 +27,21 @@ export default {
     saveLikeSinger(state, payload) {
       if (!state.singerUserLike.length) {
         payload.forEach( value => {
-          state.singerUserLike.push(value);
+          state.singerUserLike.push(parseInt(value));
         });
       }
     },
     saveLikeSong(state, payload) {
       if (!state.songUserLike.length) {
         payload.forEach( value => {
-          state.songUserLike.push(value);
+          state.songUserLike.push(parseInt(value));
         });
       }
     },
     saveLikePlayLists(state, payload) {
       if (!state.playListsUserLike.length) {
         payload.forEach( value => {
-          state.playListsUserLike.push(value);
+          state.playListsUserLike.push(parseInt(value));
         });
       }
     },

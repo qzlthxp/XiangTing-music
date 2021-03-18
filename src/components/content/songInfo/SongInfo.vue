@@ -137,10 +137,12 @@ export default {
       this.songInfos.forEach( value => {
         songs.push(value.id);
       });
-      console.log(songs);
+      this.$bus.$emit('openSelectPlayLists', songs);
     },
     addThis(index) {
-      console.log(this.songInfos[index].id);
+      let songs = [];
+      songs.push(this.songInfos[index].id);
+      this.$bus.$emit('openSelectPlayLists', songs);
     },
     addLikeSong(index) {
       if (!this.$store.state.user.userInfo.user_token) {

@@ -5,6 +5,7 @@
         :cate="cate"
         @getHot="getHotLists"
         @getCurrentLists="getCurrentPlayLists"
+        @sortChanged="sortChanged"
     >
     </play-lists-header>
     <main>
@@ -33,6 +34,15 @@ export default {
     return {
       cate: [],
       playLists:[],
+      sort: 'play_number',
+    }
+  },
+  watch: {
+    playLists: {
+      deep: true,
+      handler(newVal) {
+        this.playLists = newVal;
+      }
     }
   },
   components: {
@@ -56,7 +66,7 @@ export default {
     async getHotLists() {
       try {
         await this.$store.commit('showLoading');
-        this.playLists = quickSortPlayLists((await getHotPlayLists()).data);
+        this.playLists = quickSortPlayLists((await getHotPlayLists()).data, this.sort);
         await this.$store.commit('hideLoading');
       }catch (e) {
         return e;
@@ -65,12 +75,16 @@ export default {
     async getCurrentPlayLists(id) {
       try {
         await this.$store.commit('showLoading');
-        this.playLists = (await getPlayLists(id)).data;
+        this.playLists = quickSortPlayLists((await getPlayLists(id)).data, this.sort);
         await this.$store.commit('hideLoading');
       }catch (e) {
         return e;
       }
     },
+    sortChanged(sort) {
+      this.sort = sort;
+      this.playLists = quickSortPlayLists(this.playLists, this.sort);
+    }
   }
 }
 </script>

@@ -88,7 +88,7 @@ export default {
   main{
     width: 100%;
     height: auto;
-    padding: 50px var(--default-padding) 0;
+    padding: 50px var(--default-padding);
     position: relative;
   }
 </style>

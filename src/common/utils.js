@@ -76,8 +76,8 @@ export function paging(arr, pageCount) {
   return pages;
 }
 
-//按播放数数快速排序歌单
-export function quickSortPlayLists(data) {
+//快速排序歌单
+export function quickSortPlayLists(data, attribute) {
   if (data.length <= 1) {
     return data;
   }
@@ -85,14 +85,14 @@ export function quickSortPlayLists(data) {
   let right = [];
   let baseNum = data.splice(0,1)[0];
   for (let val of data) {
-    if (val.play_number * 1 > baseNum.play_number * 1) {
+    if (parseInt(val[attribute]) > parseInt(baseNum[attribute])) {
       left.push(val);
     }else {
       right.push(val);
     }
   }
-  left = quickSortPlayLists(left);
-  right = quickSortPlayLists(right);
+  left = quickSortPlayLists(left, attribute);
+  right = quickSortPlayLists(right, attribute);
   return [...left, baseNum, ...right];
 }
 

@@ -134,7 +134,7 @@ export default {
             introduce: this.form.introduce,
             poster: this.posterInfo.path,
             publishTime: Date.now(),
-            private: this.form.private,
+            private: this.form.private ? 1 : 0,
           };
           this.$emit('createPlayLists', obj);
         } else {

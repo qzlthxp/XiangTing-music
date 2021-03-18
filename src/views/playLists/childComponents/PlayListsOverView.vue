@@ -59,6 +59,7 @@ export default {
     padding-bottom: 18%;
     margin: 50px 2.5% 20px 0;
     position: relative;
+    cursor: pointer;
   }
   .box:nth-child(1),
   .box:nth-child(2),

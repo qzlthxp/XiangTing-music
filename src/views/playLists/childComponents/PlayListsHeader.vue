@@ -1,12 +1,23 @@
 <template>
-  <header>
+  <div class="play-lists-header">
     <!--当前分类及排序选项 Start-->
     <div class="chose">
       <div class="chose-info"  @click="handleShowHideCateDetail">
           <span>
             {{choseInfo}}
-            <i class="fa fa-angle-up fa-fw" ref="choseIcon"></i>
+            <i class="fa fa-angle-up fa-fw" style="transition: .2s linear" ref="choseIcon"></i>
           </span>
+      </div>
+      <div class="sort">
+        <span
+            class="music-a"
+            v-for="(item,index) in sortItem"
+            :key="index"
+            :class="{active: index === currentSort}"
+            @click="choseSort(index)"
+        >
+          {{item.name}}
+        </span>
       </div>
     </div>
     <!--当前分类及排序选项 End-->
@@ -31,7 +42,7 @@
       </li>
     </ul>
     <!--歌单分类详情 End-->
-  </header>
+  </div>
 </template>
 
 <script>
@@ -49,6 +60,7 @@ export default {
     return {
       currentTopIndex: 0,
       currentSecIndex: 0,
+      currentSort: 0,
       cateDetailIsShow: false,
       cateIcon: [
         {class: 'fa fa-bookmark fa-fw'},
@@ -58,6 +70,10 @@ export default {
         {class: 'fa fa-clock-o fa-fw'},
         {class: 'fa fa-music fa-fw'},
         {class: 'fa fa-language fa-fw'},
+      ],
+      sortItem: [
+        {name: '最热', sort: 'play_number'},
+        {name: '最新', sort: 'publishTime'},
       ]
     }
   },
@@ -84,34 +100,43 @@ export default {
         this.$emit('getCurrentLists', this.cate[this.currentTopIndex].secCate[this.currentSecIndex].play_lists_detail_cate_id);
       }
       this.cateDetailIsShow = false;
+    },
+    choseSort(index) {
+      this.currentSort = index;
+      this.$emit('sortChanged', this.sortItem[index].sort);
     }
   }
 }
 </script>
 
 <style scoped>
-.play-lists header{
+.play-lists-header{
   width: 100%;
-  height: 50px;
+  padding: 25px 0 0;
   position: relative;
 }
-.play-lists header .chose{
-  height: 100%;
+.play-lists-header .chose{
+  user-select: none;
+  display: flex;
+  align-items: flex-end;
+}
+.play-lists-header .chose .chose-info{
   font-size: 2rem;
   font-weight: bold;
-  line-height: 50px;
-}
-.play-lists header .chose .chose-info {
-  user-select: none;
   cursor: pointer;
 }
-.play-lists header .chose .chose-info i{
-  color: #000;
-  transition: .2s ease-in-out;
+.play-lists-header .chose .sort{
+  padding-left: 25px;
+}
+.play-lists-header .chose .sort span{
+  display: inline-block;
+  margin: 0 10px;
+  position: relative;
+  cursor: pointer;
 }
 .cate-detail{
   position: absolute;
-  top: 50px;
+  top: 70px;
   left: 0;
   width: 600px;
   height: 500px;

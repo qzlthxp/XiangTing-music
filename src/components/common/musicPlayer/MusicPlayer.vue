@@ -149,7 +149,7 @@
                     NaN
                   </div>
                   <div v-show="index === currentSelectIndex" class="select">
-                    <span><i title="加入歌单" class="fa fa-plus fa-fw"></i></span>
+                    <span><i title="加入歌单" class="fa fa-plus fa-fw" @click="addThis(index)"></i></span>
                     <span>
                       <i title="喜欢" v-show="!listLike(index)" class="fa fa-heart-o fa-fw" @click="addLikeSong('list',index)"></i>
                       <i title="取消喜欢" v-show="listLike(index)" class="fa fa-heart activeLike fa-fw" @click="removeLikeSong('list',index)"></i>
@@ -389,6 +389,14 @@ export default {
           break;
         default:
           break;
+      }
+    },
+    //点击歌曲列表歌曲添加到歌单
+    addThis(index) {
+      if (this.totalSongList) {
+        let songs = [];
+        songs.push(this.$store.state.song.songList[index].id);
+        this.$bus.$emit('openSelectPlayLists', songs);
       }
     },
     //歌单没有歌曲点击跳转到首页推荐

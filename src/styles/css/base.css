@@ -48,6 +48,9 @@ i{
 button:hover{
   cursor: pointer;
 }
+.music-a.active{
+  font-weight: bold;
+}
 .music-a:after{
   content: '';
   position: absolute;

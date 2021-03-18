@@ -133,7 +133,9 @@ export default {
       }
     },
     addThis() {
-      console.log(this.songInfo.id);
+      let songs = [];
+      songs.push(this.songInfo.id);
+      this.$bus.$emit('openSelectPlayLists', songs);
     }
   }
 }
