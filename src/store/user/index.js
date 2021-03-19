@@ -22,6 +22,9 @@ export default {
     saveUser(state, payload) {
       if (payload.status) {
         ({user_id: state.userInfo.user_id, user_name: state.userInfo.user_name, user_photo: state.userInfo.user_photo, user_token: state.userInfo.user_token} = payload);
+        localStorage.setItem('music_token', state.userInfo.user_token);
+        sessionStorage.setItem('music_token', state.userInfo.user_token);
+        sessionStorage.setItem('music_user_id', state.userInfo.user_id);
       }
     },
     saveLikeSinger(state, payload) {
@@ -55,15 +58,27 @@ export default {
       state.singerUserLike = [];
       state.songUserLike = [];
       state.playListsUserLike = [];
+      localStorage.removeItem('music_token');
+      sessionStorage.removeItem('music_token');
+      sessionStorage.removeItem('music_user_id');
     },
     coverSongs(state, payload) {
-      state.songUserLike = [...payload];
+      state.songUserLike = [];
+      payload.forEach( value => {
+        state.songUserLike.push(parseInt(value));
+      });
     },
     coverSingers(state, payload) {
-      state.singerUserLike = [...payload];
+      state.singerUserLike = [];
+      payload.forEach( value => {
+        state.singerUserLike.push(parseInt(value));
+      });
     },
     coverPlayLists(state, payload) {
-      state.playListsUserLike = [...payload];
+      state.playListsUserLike = [];
+      payload.forEach( value => {
+        state.playListsUserLike.push(parseInt(value));
+      });
     },
   },
   actions: {

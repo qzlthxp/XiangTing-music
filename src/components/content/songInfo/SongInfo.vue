@@ -133,16 +133,24 @@ export default {
       this.$bus.$emit('play-first-song');
     },
     addAll() {
-      let songs = [];
-      this.songInfos.forEach( value => {
-        songs.push(value.id);
-      });
-      this.$bus.$emit('openSelectPlayLists', songs);
+      if (this.$store.state.user.userInfo.user_token) {
+        let songs = [];
+        this.songInfos.forEach( value => {
+          songs.push(value.id);
+        });
+        this.$bus.$emit('openSelectPlayLists', songs);
+      }else {
+        this.$bus.$emit('show-notice', '登录后可添加到歌单');
+      }
     },
     addThis(index) {
-      let songs = [];
-      songs.push(this.songInfos[index].id);
-      this.$bus.$emit('openSelectPlayLists', songs);
+      if (this.$store.state.user.userInfo.user_token) {
+        let songs = [];
+        songs.push(this.songInfos[index].id);
+        this.$bus.$emit('openSelectPlayLists', songs);
+      }else {
+        this.$bus.$emit('show-notice', '登录后可添加到歌单');
+      }
     },
     addLikeSong(index) {
       if (!this.$store.state.user.userInfo.user_token) {

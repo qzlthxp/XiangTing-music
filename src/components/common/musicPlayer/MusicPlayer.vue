@@ -393,10 +393,12 @@ export default {
     },
     //点击歌曲列表歌曲添加到歌单
     addThis(index) {
-      if (this.totalSongList) {
+      if (this.totalSongList && this.$store.state.user.userInfo.user_token) {
         let songs = [];
         songs.push(this.$store.state.song.songList[index].id);
         this.$bus.$emit('openSelectPlayLists', songs);
+      }else {
+        this.$bus.$emit('show-notice', '登录后可添加到歌单');
       }
     },
     //歌单没有歌曲点击跳转到首页推荐

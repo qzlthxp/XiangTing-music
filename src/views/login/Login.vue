@@ -46,8 +46,6 @@ export default {
         let res = await Login(payload);
         if (res.status) {
           await this.saveUser(res);
-          await localStorage.setItem('music_token', res.user_token);
-          await sessionStorage.setItem('music_token', res.user_token);
           await this.$router.replace('/');
           await this.getUserLike(res.user_id);
         }else {

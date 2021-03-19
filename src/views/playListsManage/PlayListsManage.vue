@@ -136,8 +136,8 @@ export default {
   },
   created() {
     this.getAllCate();
-    if (sessionStorage.getItem('manage_user_id')) {
-      let user_id = sessionStorage.getItem('manage_user_id');
+    if (sessionStorage.getItem('music_user_id')) {
+      let user_id = sessionStorage.getItem('music_user_id');
       this.getUserAllPlayLists(user_id);
     }
   },
@@ -182,7 +182,7 @@ export default {
       this.createNewPlayLists(obj);
       this.closeCreate();
       setTimeout( () => {
-        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'));
       }, 250);
     },
     handleOpen(key, keyPath) {
@@ -201,7 +201,7 @@ export default {
       this.deletePlayLists(this.ids);
       this.multipleSelection = [];
       setTimeout( () => {
-        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'));
       }, 250);
     },
     handleEdit(index, row) {
@@ -211,7 +211,7 @@ export default {
       this.ids.push(row.play_lists_id);
       this.deletePlayLists(this.ids);
       setTimeout( () => {
-        this.getUserAllPlayLists(sessionStorage.getItem('manage_user_id'));
+        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'));
       }, 250);
     }
   }

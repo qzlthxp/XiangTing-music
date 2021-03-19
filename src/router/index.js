@@ -124,16 +124,9 @@ const routes = [
     path: '/playlists_manage',
     name: 'PlayListsManage',
     component: () => import('@/views/playListsManage/PlayListsManage'),
-    beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('music_token')) {
-        next();
-      }else {
-        next('/login');
-      }
-    },
     meta: {
       title: '歌单管理',
-      needLogin: true,
+      requireAuth: true,
     }
   },
   {
@@ -159,18 +152,6 @@ VueRouter.prototype.push = function(location, onResolve, onReject) {
   return originalPush.call(this, location).catch(err => err);
 }
 
-router.beforeEach( (to, from, next) => {
-  document.title = '想听音乐🎧-' + to.meta.title;
-  if (to.meta.needLogin) {
-    if (sessionStorage.getItem('music_token')) {
-      next();
-    }else {
-      next('/login');
-    }
-  }else {
-    next();
-  }
-})
 
 
 export default router

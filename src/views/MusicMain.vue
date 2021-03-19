@@ -44,9 +44,6 @@ export default {
         if (res.status) {
           await this.saveUser(res);
           await this.getUserLike(res.user_id);
-          await localStorage.setItem('music_token', res.user_token);
-          await sessionStorage.setItem('music_token', res.user_token);
-          // await this.$router.replace('/');
         }
       }catch (e) {
         return e;

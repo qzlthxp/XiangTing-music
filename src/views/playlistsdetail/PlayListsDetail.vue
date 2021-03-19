@@ -1,6 +1,6 @@
 <template>
   <div class="play-lists-detail">
-    <div v-if="Object.keys(playListsInfo).length" class="left">
+    <div class="left">
       <!--歌单封面 Start-->
       <img class="play-lists-poster" :src="playListsInfo.play_lists_poster" alt="">
       <!--歌单封面 End-->
@@ -21,7 +21,7 @@
       <!--简介 End-->
     </div>
 
-    <div v-if="Object.keys(playListsInfo).length" class="right">
+    <div class="right">
       <p class="play-lists-title">{{playListsInfo.play_lists_title}}</p>
       <div class="user-info">
         <img class="user-photo" :src="playListsInfo.user_photo" alt="用户头像" />
@@ -30,7 +30,6 @@
       <p class="publish-time"><span>发布日期：</span><span>{{issueDate}}</span></p>
       <song-info v-if="songsInfo.length" :song-infos="songsInfo"></song-info>
     </div>
-
   </div>
 </template>
 

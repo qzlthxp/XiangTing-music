@@ -104,7 +104,7 @@ export default {
   computed: {
     uploadData() {
       return {
-        'user_id': sessionStorage.getItem('manage_user_id'),
+        'user_id': sessionStorage.getItem('music_user_id'),
         'publishTime': Date.now(),
       }
     },
@@ -128,7 +128,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let obj = {
-            user_id: sessionStorage.getItem('manage_user_id'),
+            user_id: sessionStorage.getItem('music_user_id'),
             play_lists_detail_cate_ids: this.checkedCate,
             title: this.form.title,
             introduce: this.form.introduce,
