@@ -13,6 +13,7 @@ export default {
       user_name: '',
       user_photo: '',
       user_token: '',
+      detail_cate: null,
     },
     singerUserLike: [],
     songUserLike: [],
@@ -21,7 +22,13 @@ export default {
   mutations: {
     saveUser(state, payload) {
       if (payload.status) {
-        ({user_id: state.userInfo.user_id, user_name: state.userInfo.user_name, user_photo: state.userInfo.user_photo, user_token: state.userInfo.user_token} = payload);
+        ({
+          user_id: state.userInfo.user_id,
+          user_name: state.userInfo.user_name,
+          user_photo: state.userInfo.user_photo,
+          user_token: state.userInfo.user_token,
+          detail_cate: state.userInfo.detail_cate
+        } = payload);
         localStorage.setItem('music_token', state.userInfo.user_token);
         sessionStorage.setItem('music_token', state.userInfo.user_token);
         sessionStorage.setItem('music_user_id', state.userInfo.user_id);
@@ -54,6 +61,7 @@ export default {
         user_name: '',
         user_photo: '',
         user_token: '',
+        detail_cate: null,
       };
       state.singerUserLike = [];
       state.songUserLike = [];

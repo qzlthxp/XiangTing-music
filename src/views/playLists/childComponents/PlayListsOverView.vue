@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import {updateDetailCate} from "@/network/playLists";
+
 export default {
   name: "PlayListsOverView",
   props: {
@@ -39,8 +41,24 @@ export default {
     },
   },
   methods: {
+    async updateDetailCateId(obj) {
+      try {
+        let res = await updateDetailCate(obj);
+        if (res.success) {
+          this.$store.state.user.userInfo.detail_cate = res.detail_cate;
+        }
+      }catch (e) {
+        return e;
+      }
+    },
     goPlayListsDetail(index) {
-      this.$router.push('/music_main/playlists_detail/' + this.playListsInfos[index].play_lists_id);
+      const  play_lists_id =  this.playListsInfos[index].play_lists_id;
+      let obj = {
+        user_id: this.$store.state.user.userInfo.user_id,
+        play_lists_id,
+      };
+      this.updateDetailCateId(obj);
+      this.$router.push('/music_main/playlists_detail/' + play_lists_id);
     }
   }
 }

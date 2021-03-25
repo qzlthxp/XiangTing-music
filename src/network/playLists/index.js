@@ -45,3 +45,14 @@ export function addMany(obj) {
     }
   });
 }
+
+export function updateDetailCate(obj) {
+  return request({
+    url: '/update_detail_cate_id',
+    method: 'post',
+    params: {
+      user_id: obj.user_id,
+      play_lists_id: obj.play_lists_id
+    }
+  });
+}

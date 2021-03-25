@@ -26,10 +26,9 @@
         <!--推荐歌单 Start-->
         <div class="recommend" ref="recGeDan">
           <rec-play-lists
-              v-if="playLists.length"
               :recListsScrollActive="recListsScrollActive"
               :playLists="playLists"
-              :selectPlayLists="selectPlayLists"
+              :selectPlayLists="selects"
               :currentPlayListsIndex="currentPlayListsIndex"
               @playListsSelectChange="playListsSelectChange"
           >
@@ -55,11 +54,10 @@ export default {
       currentPlayListsIndex: 0,
       playLists: [],
       selectPlayLists: [
-        {name: '每日精选', play_lists_detail_cate_id: 0},
-        {name: '背景音乐', play_lists_detail_cate_id: 4},
-        {name: '学习工作', play_lists_detail_cate_id: 9},
-        {name: '伤感', play_lists_detail_cate_id: 14},
-        {name: '现场音乐', play_lists_detail_cate_id: 3},
+        {name: '背景音乐', detail_cate_id: 4},
+        {name: '学习工作', detail_cate_id: 9},
+        {name: '伤感', detail_cate_id: 14},
+        {name: '现场音乐', detail_cate_id: 3},
       ],
       page1ScrollActive: false,
       recListsScrollActive: false,
@@ -70,14 +68,29 @@ export default {
     MusicBanner,
     RecPlayLists,
   },
-  created() {
-    this.getPlayListsByDetail(this.selectPlayLists[this.currentPlayListsIndex].play_lists_detail_cate_id);
-  },
   mounted() {
+    this.getPlayListsByDetail(this.selects[this.currentPlayListsIndex].detail_cate_id);
     this.page1ScrollActive = true;
     this.$bus.$on('fullPageChanged', num => {
       this.pageChanged(num);
     });
+  },
+  computed: {
+    selects() {
+      let userInfo = this.$store.state.user.userInfo;
+      if (userInfo.user_id && userInfo.detail_cate) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        return [
+          { name: '为您推荐', detail_cate_id: this.$store.state.user.userInfo.detail_cate},
+            ...this.selectPlayLists
+        ];
+      }else {
+        return [
+          {name: '每日精选', detail_cate_id: 0},
+          ...this.selectPlayLists
+        ];
+      }
+    }
   },
   methods: {
     async getHotP() {
@@ -100,7 +113,7 @@ export default {
     },
     playListsSelectChange(index) {
       this.currentPlayListsIndex = index;
-      this.getPlayListsByDetail(this.selectPlayLists[index].play_lists_detail_cate_id);
+      this.getPlayListsByDetail(this.selects[index].detail_cate_id);
     },
     pageChanged(num) {
       switch (num) {
@@ -172,7 +185,7 @@ export default {
     cursor: default;
   }
   .left .desc h1 span:nth-of-type(1) i {
-    animation-delay: 0;
+    animation-delay: 0s;
   }
   .left .desc h1 span:nth-of-type(2) i {
     animation-delay: 0.1s;
@@ -184,7 +197,7 @@ export default {
     animation-delay: 0.3s;
   }
   .left .desc h1 span:nth-of-type(1) {
-    animation-delay: 0;
+    animation-delay: 0s;
   }
   .left .desc h1 span:nth-of-type(2) {
     animation-delay: 0.1s;

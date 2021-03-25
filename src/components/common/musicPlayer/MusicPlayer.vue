@@ -523,6 +523,13 @@ export default {
         }else {
           this.$refs.domPoster.src = songInfo.al.picUrl;
         }
+        if ("mediaSession" in navigator){
+          // eslint-disable-next-line no-undef
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: songInfo.song_name,
+            artwork: [{src: this.$refs.domPoster.src}]
+          });
+        }
         this.$refs.domAudio.src = songInfo.song_url;
         this.songName = songInfo.song_name;
         this.singerInfo = songInfo.singer_info;
@@ -774,7 +781,7 @@ export default {
   justify-content: flex-end;
   align-items: center;
 }
-.right>div:nth-child(even){
+.right>div:nth-child(odd){
   margin: 0 var(--default-margin);
 }
 .center{
