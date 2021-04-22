@@ -1,5 +1,5 @@
 <template>
-  <div class="own-info">
+  <div class="user-rank">
     <button class="play-all" @click="playAll">
       <span>
         <i class="fa fa-play"></i>
@@ -22,22 +22,21 @@
         <span class="rank-num">
           {{ index + 1 }}
         </span>
-        <span class="song-name" :title="item.song_name">
+        <span class="song-name" :title="item.song_info.name">
           <a
             @mouseover="elTransform($event)"
             @mouseleave="elRemoveTransform($event)"
             href="javascript:;"
           >
-            {{ item.name }}
+            {{ item.song_info.name }}
           </a>
         </span>
         <span class="play-number">
-          {{ item.play_number }}
+          {{ item.song_info.play_number }}
         </span>
         <span class="publish-time">
-          {{ item.publishTime | formatDate }}
+          {{ item.song_info.publishTime | formatDate }}
         </span>
-        <!--        <span class="song-duration">{{item.song_duration}}</span>-->
         <div class="select" v-show="currentIndex === index">
           <span title="播放" @click="playThisSong(index)">
             <i class="fa fa-play fa-fw"></i>
@@ -52,7 +51,7 @@
 import { formatDate } from '@/common/utils'
 import { addPlayNumber } from '@/network/song/index'
 export default {
-  name: 'OwnInfo',
+  name: 'UserRank',
   props: {
     songs: {
       type: Array,
@@ -60,22 +59,11 @@ export default {
         return []
       },
     },
-    userInfo: {
-      type: Object,
-      default() {
-        return {}
-      },
-    },
   },
   data() {
     return {
       currentIndex: null,
     }
-  },
-  computed: {
-    isLiked() {
-      return false
-    },
   },
   filters: {
     formatDate,
@@ -107,7 +95,7 @@ export default {
     playThisSong(index) {
       let ids = []
       let num = null
-      let thisSong = this.songs[index]
+      let thisSong = this.songs[index].song_info
       ids.push(thisSong.id)
       this.$store.state.song.songList.forEach((value, index) => {
         if (value.id === thisSong.id) {
@@ -121,9 +109,9 @@ export default {
           id: thisSong.id,
           singer_info: [
             {
-              name: this.userInfo.user_name,
-              id: this.userInfo.user_id,
-              photo: this.userInfo.user_photo,
+              name: this.songs[index].user_info.user_name,
+              id: this.songs[index].user_info.user_id,
+              photo: this.songs[index].user_info.user_photo,
             },
           ],
           song_name: thisSong.name,
@@ -139,40 +127,24 @@ export default {
       let arr = []
       let ids = []
       this.songs.forEach((value) => {
-        ids.push(value.id)
+        ids.push(value.song_info.id)
         arr.push({
-          id: value.id,
+          id: value.song_info.id,
           singer_info: [
             {
-              name: this.userInfo.user_name,
-              id: this.userInfo.user_id,
-              photo: this.userInfo.user_photo,
+              name: value.user_info.user_name,
+              id: value.user_info.user_id,
+              photo: value.user_info.user_photo,
             },
           ],
-          song_name: value.name,
-          song_url: value.url,
+          song_name: value.song_info.name,
+          song_url: value.song_info.url,
           isUser: true,
         })
       })
       this.$store.commit('addSongListAllSong', arr)
       this.$bus.$emit('play-first-song')
       this.updatePlayNumber(ids)
-    },
-    addLikeSong(index) {
-      if (!this.$store.state.user.userInfo.user_token) {
-        this.$bus.$emit('show-notice', '登录后可添加喜欢的歌曲')
-      } else {
-        this.$store.dispatch('likeSongIsAdd', {
-          song_id: this.songInfos[index].id,
-          this: this,
-        })
-      }
-    },
-    removeLikeSong(index) {
-      this.$store.dispatch('likeSongIsDec', {
-        song_id: this.songInfos[index].id,
-        this: this,
-      })
     },
     elTransform($event) {
       let childWidth = $event.target.offsetWidth
@@ -194,7 +166,7 @@ export default {
 </script>
 
 <style scoped>
-.own-info {
+.user-rank {
   width: 100%;
   height: auto;
   position: relative;

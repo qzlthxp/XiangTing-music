@@ -1,10 +1,10 @@
-import {apiRequest} from "@/network/apiRequest";
-
+import { apiRequest } from '@/network/apiRequest'
+import { request } from '@/network/request'
 export function getTopList() {
   return apiRequest({
     url: '/toplist',
     method: 'get',
-  });
+  })
 }
 
 export function getListDetail(id) {
@@ -12,7 +12,14 @@ export function getListDetail(id) {
     url: '/playlist/detail',
     method: 'get',
     params: {
-      id
-    }
-  });
+      id,
+    },
+  })
+}
+
+export function getUserRank() {
+  return request({
+    url: '/song_rank',
+    method: 'get',
+  })
 }

@@ -3,14 +3,14 @@
     <search-header @getMore="getMore"></search-header>
     <main>
       <search-content
-          v-if="Object.keys(searchRes).length"
-          :search-res="searchRes"
-          :type="type"
+        v-if="Object.keys(searchRes).length"
+        :search-res="searchRes"
+        :type="type"
       >
       </search-content>
       <hot-search-list
-          v-if="hots.length && !Object.keys(searchRes).length"
-          :hots="hots"
+        v-if="hots.length && !Object.keys(searchRes).length"
+        :hots="hots"
       >
       </hot-search-list>
     </main>
@@ -18,16 +18,16 @@
 </template>
 
 <script>
-import SearchHeader from "@/views/search/childrenComponents/SearchHeader";
-import SearchContent from "@/views/search/childrenComponents/SearchContent";
-import HotSearchList from "@/views/search/childrenComponents/HotSearchList";
-import {searchMore, searchHot} from "@/network/search";
+import SearchHeader from '@/views/search/childrenComponents/SearchHeader'
+import SearchContent from '@/views/search/childrenComponents/SearchContent'
+import HotSearchList from '@/views/search/childrenComponents/HotSearchList'
+import { searchMore, searchHot } from '@/network/search'
 
 export default {
-  name: "Search",
+  name: 'Search',
   data() {
     return {
-      type: 100,
+      type: 1,
       searchRes: {},
       hots: [],
       isLoading: false,
@@ -39,56 +39,56 @@ export default {
         this.getMore({
           keywords: to.query.searchWord,
           type: this.type,
-        });
+        })
       }
-    }
+    },
   },
   components: {
     SearchHeader,
     SearchContent,
-    HotSearchList
+    HotSearchList,
   },
   created() {
     if (this.$route.query.searchWord) {
       this.getMore({
         keywords: this.$route.query.searchWord,
-        type: 100,
-      });
-    }else {
-      this.getHot();
+        type: this.type,
+      })
+    } else {
+      this.getHot()
     }
   },
   methods: {
     async getHot() {
       try {
-        this.hots = (await searchHot()).result.hots;
-      }catch (e) {
-        return e;
+        this.hots = (await searchHot()).result.hots
+      } catch (e) {
+        return e
       }
     },
     async getMore(obj) {
       try {
-        this.type = obj.type;
-        this.searchRes = (await searchMore(obj)).result;
-      }catch (e) {
-        return e;
+        this.type = obj.type
+        this.searchRes = (await searchMore(obj)).result
+      } catch (e) {
+        return e
       }
     },
-  }
+  },
 }
 </script>
 
 <style scoped>
-  .search{
-    width: 100%;
-    height: auto;
-    padding: 80px 0 0;
-    position: relative;
-  }
-  main{
-    width: 100%;
-    height: auto;
-    padding: 50px var(--default-padding);
-    position: relative;
-  }
+.search {
+  width: 100%;
+  height: auto;
+  padding: 80px 0 0;
+  position: relative;
+}
+main {
+  width: 100%;
+  height: auto;
+  padding: 50px var(--default-padding);
+  position: relative;
+}
 </style>
