@@ -20,6 +20,7 @@ import {
   TableColumn,
   DatePicker,
   Popover,
+  Popconfirm,
   Form,
   FormItem,
   Alert,
@@ -54,6 +55,7 @@ export default function(app) {
   app.use(TableColumn)
   app.use(DatePicker)
   app.use(Popover)
+  app.use(Popconfirm)
   app.use(Form)
   app.use(FormItem)
   app.use(Alert)
