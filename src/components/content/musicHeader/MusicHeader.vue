@@ -218,12 +218,11 @@ export default {
       }
     },
     upLoadSongAction() {
-      return this.$store.state.BASEURL + '/upload_user_song'
+      return process.env.VUE_APP_MUSIC_BACK + '/upload_user_song'
     },
     uploadData() {
       return {
         user_id: this.$store.state.user.userInfo.user_id,
-        song_name: this.uploadSongName,
         publishTime: Date.now(),
       }
     },
@@ -277,14 +276,14 @@ export default {
     beforeAvatarUpload(file) {
       const isAllowType = this.fileType.some((value) => value === file.type)
       this.uploadSongName = file.name.slice(0, file.name.length - 4)
-      const isLt5M = file.size / 1024 / 1024 < 5
+      const isLt20M = file.size / 1024 / 1024 < 20
       if (!isAllowType) {
         this.$message.error('只能上传mp3,wav格式的文件')
       }
-      if (!isLt5M) {
-        this.$message.error('上传歌曲大小不能超过 5MB!')
+      if (!isLt20M) {
+        this.$message.error('上传歌曲大小不能超过 20MB!')
       }
-      return isAllowType && isLt5M
+      return isAllowType && isLt20M
     },
     handleAvatarSuccess(response) {
       let res = response

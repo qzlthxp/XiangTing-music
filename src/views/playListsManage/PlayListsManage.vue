@@ -47,7 +47,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column type="index" width="50" label="序号"> </el-table-column>
         <el-table-column label="封面" width="100">
           <template slot-scope="scope">
             <el-image
@@ -97,17 +97,30 @@
       @createPlayLists="createPlayLists"
     >
     </create>
+    <play-lists-editor
+      v-if="showEditor"
+      :editorInfo="editorInfo"
+      :editorSongs="editorSongs"
+      @closeEditor="closeEditor"
+      @update-play-lists-info="updatePlayListsInfo"
+      @delete-song-of-play-lists="deleteSong"
+    ></play-lists-editor>
   </div>
 </template>
 
 <script>
 import Create from '@/views/playListsManage/childrenComponents/Create'
+import PlayListsEditor from '@/views/playListsManage/childrenComponents/PlayListsEditor'
 import {
   getAllPlayLists,
   getCateManage,
   create,
+  upDate,
   delPlayLists,
+  getSongsInfo,
+  deleteSongOfPlayLists
 } from '@/network/playlistsManage'
+import { getSongsByPlayListsId } from '@/network/playListsDetail'
 import { formatDate } from '@/common/utils'
 
 export default {
@@ -115,11 +128,14 @@ export default {
   data() {
     return {
       cate: [],
-      info: {},
+      editorInfo: {},
+      editorSongs: [],
       tableData: [],
       multipleSelection: [],
       ids: [],
       showCreate: false,
+      showEditor: false,
+      play_lists_id: 0,
     }
   },
   watch: {
@@ -137,12 +153,13 @@ export default {
   },
   components: {
     Create,
+    PlayListsEditor
   },
   created() {
     this.getAllCate()
     if (sessionStorage.getItem('music_user_id')) {
       let user_id = sessionStorage.getItem('music_user_id')
-      this.getUserAllPlayLists(user_id)
+      this.getUserAllPlayLists(user_id, user_id)
     }
   },
   methods: {
@@ -153,9 +170,9 @@ export default {
         return e
       }
     },
-    async getUserAllPlayLists(id) {
+    async getUserAllPlayLists(userId, currentUserId) {
       try {
-        this.tableData = (await getAllPlayLists(id)).playLists
+        this.tableData = (await getAllPlayLists(1, 1)).playLists
       } catch (e) {
         return e
       }
@@ -176,18 +193,60 @@ export default {
         return e
       }
     },
+    async getSongs(id) {
+      try {
+        let ids = (await getSongsByPlayListsId(id)).songs
+        this.editorSongs = (await getSongsInfo(ids.join(','))).songs
+      } catch (error) {
+        return error
+      }
+    },
+    async deleteSong(ids) {
+      try {
+        let res = await deleteSongOfPlayLists(ids, this.play_lists_id)
+        for (let val of ids) {
+          for (let i in this.editorSongs) {
+            if (this.editorSongs[i].id === val) {
+              this.editorSongs.splice(i, 1)
+            }
+          }
+        }
+        if (res.status) {
+          this.$toasted.show(res.message)
+        }
+      }catch (err) {
+        return err;
+      }
+    },
     createNew() {
       this.showCreate = true
     },
     closeCreate() {
       this.showCreate = false
     },
+    closeEditor() {
+      this.showEditor = false
+    },
     createPlayLists(obj) {
       this.createNewPlayLists(obj)
       this.closeCreate()
       setTimeout(() => {
-        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'))
+        let userId = sessionStorage.getItem('music_user_id')
+        this.getUserAllPlayLists(userId, userId)
       }, 250)
+    },
+    async updatePlayListsInfo(obj) {
+      try {
+        let res = await upDate(obj)
+        if (res.status) {
+          this.$toasted.show(res.message)
+        }
+        let userId = sessionStorage.getItem('music_user_id')
+        await this.getUserAllPlayLists(userId, userId)
+        await this.closeEditor()
+      } catch (error) {
+        return error;
+      }
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath)
@@ -205,19 +264,24 @@ export default {
       this.deletePlayLists(this.ids)
       this.multipleSelection = []
       setTimeout(() => {
-        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'))
+        let userId = sessionStorage.getItem('music_user_id')
+        this.getUserAllPlayLists(userId, userId)
       }, 250)
     },
     handleEdit(row) {
-      console.log(row)
+      this.showEditor = true
+      this.editorInfo = row
+      this.getSongs(row.play_lists_id)
+      this.play_lists_id = row.play_lists_id
     },
     handleDelete(index, row) {
       this.ids.push(row.play_lists_id)
       this.deletePlayLists(this.ids)
       setTimeout(() => {
-        this.getUserAllPlayLists(sessionStorage.getItem('music_user_id'))
+        let userId = sessionStorage.getItem('music_user_id')
+        this.getUserAllPlayLists(userId, userId)
       }, 250)
-    },
+    }
   },
 }
 </script>
@@ -227,6 +291,7 @@ export default {
   width: 100%;
   min-width: 1440px;
   min-height: 100vh;
+  padding-right: calc(var(--default-padding) / 2);
   overflow: auto;
 }
 </style>

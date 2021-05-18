@@ -40,7 +40,11 @@ export default {
     NoLogin,
   },
   created() {
-    this.TokenLogin()
+    if (this.$store.state.user.userInfo.user_token) {
+      this.getUserLike(this.$store.state.user.userInfo.user_id)
+    }else{
+      this.TokenLogin()
+    }
   },
   methods: {
     ...mapMutations([

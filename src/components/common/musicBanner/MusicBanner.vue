@@ -67,8 +67,8 @@ export default {
   methods: {
     async getBanner() {
       try {
-        // this.swiperList = (await banner()).banners
-        this.swiperList = (await getHotPlayLists()).data
+        let res = (await getHotPlayLists()).data
+        this.swiperList = res.splice(0, 5)
       } catch (e) {
         return e
       }

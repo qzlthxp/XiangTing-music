@@ -157,10 +157,10 @@ export default {
   },
   computed: {
     uploadPhotoAction() {
-      return this.$store.state.BASEURL + '/update_user_photo';
+      return process.env.VUE_APP_MUSIC_BACK + '/update_user_photo';
     },
     uploadBgAction() {
-      return this.$store.state.BASEURL + '/update_user_bg';
+      return process.env.VUE_APP_MUSIC_BACK + '/update_user_bg';
     },
     uploadData() {
       return {

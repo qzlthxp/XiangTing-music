@@ -37,10 +37,18 @@
         <span class="publish-time">
           {{ item.publishTime | formatDate }}
         </span>
-        <!--        <span class="song-duration">{{item.song_duration}}</span>-->
         <div class="select" v-show="currentIndex === index">
           <span title="播放" @click="playThisSong(index)">
             <i class="fa fa-play fa-fw"></i>
+          </span>
+          <span v-if="isMe">
+            <el-popconfirm
+              title="这是一段内容确定删除吗？"
+              @confirm="deleteThisSong(index)"
+            >
+              <span slot="reference"><i class="fa fa-trash-o fa-fw"></i></span>
+            </el-popconfirm>
+            
           </span>
         </div>
       </li>
@@ -76,6 +84,9 @@ export default {
     isLiked() {
       return false
     },
+    isMe() {
+      return this.$store.state.user.userInfo.user_id == this.$route.params.user_id
+    }
   },
   filters: {
     formatDate,
@@ -114,7 +125,7 @@ export default {
           num = index
         }
       })
-      if (num) {
+      if (num !== null) {
         this.$bus.$emit('play-this-song', num)
       } else {
         this.$store.commit('addSongListByUnShift', {
@@ -173,6 +184,9 @@ export default {
         song_id: this.songInfos[index].id,
         this: this,
       })
+    },
+    deleteThisSong(index) {
+      this.$emit('delete-user-song', this.songs[index].id)
     },
     elTransform($event) {
       let childWidth = $event.target.offsetWidth

@@ -23,7 +23,7 @@ export default {
     commentUserDisLike: [],
   },
   mutations: {
-    saveUser(state, payload) {
+    saveUser (state, payload) {
       if (payload.status) {
         state.userInfo.user_id = payload.user_id
         state.userInfo.user_name = payload.user_name
@@ -35,42 +35,42 @@ export default {
         sessionStorage.setItem('music_user_id', state.userInfo.user_id)
       }
     },
-    saveLikeSinger(state, payload) {
+    saveLikeSinger (state, payload) {
       if (!state.singerUserLike.length) {
         payload.forEach((value) => {
           state.singerUserLike.push(parseInt(value))
         })
       }
     },
-    saveLikeSong(state, payload) {
+    saveLikeSong (state, payload) {
       if (!state.songUserLike.length) {
         payload.forEach((value) => {
           state.songUserLike.push(parseInt(value))
         })
       }
     },
-    saveLikePlayLists(state, payload) {
+    saveLikePlayLists (state, payload) {
       if (!state.playListsUserLike.length) {
         payload.forEach((value) => {
           state.playListsUserLike.push(parseInt(value))
         })
       }
     },
-    saveLikeComment(state, payload) {
+    saveLikeComment (state, payload) {
       if (!state.commentUserLike.length) {
         payload.forEach((value) => {
           state.commentUserLike.push(parseInt(value))
         })
       }
     },
-    saveDisLikeComment(state, payload) {
+    saveDisLikeComment (state, payload) {
       if (!state.commentUserDisLike.length) {
         payload.forEach((value) => {
           state.commentUserDisLike.push(parseInt(value))
         })
       }
     },
-    removeUser(state) {
+    removeUser (state) {
       state.userInfo = {
         user_id: null,
         user_name: '',
@@ -87,42 +87,42 @@ export default {
       sessionStorage.removeItem('music_token')
       sessionStorage.removeItem('music_user_id')
     },
-    coverSongs(state, payload) {
+    coverSongs (state, payload) {
       state.songUserLike = []
       payload.forEach((value) => {
         state.songUserLike.push(parseInt(value))
       })
     },
-    coverSingers(state, payload) {
+    coverSingers (state, payload) {
       state.singerUserLike = []
       payload.forEach((value) => {
         state.singerUserLike.push(parseInt(value))
       })
     },
-    coverPlayLists(state, payload) {
+    coverPlayLists (state, payload) {
       state.playListsUserLike = []
       payload.forEach((value) => {
         state.playListsUserLike.push(parseInt(value))
       })
     },
-    addLikeComment(state, payload) {
+    addLikeComment (state, payload) {
       if (!state.commentUserLike.some((value) => value === payload)) {
         state.commentUserLike.push(payload)
       }
     },
-    addDisLikeComment(state, payload) {
+    addDisLikeComment (state, payload) {
       if (!state.commentUserDisLike.some((value) => value === payload)) {
         state.commentUserDisLike.push(payload)
       }
     },
-    removeUserLikeComment(state, payload) {
+    removeUserLikeComment (state, payload) {
       state.commentUserLike.forEach((value, index, self) => {
         if (value === payload) {
           self.splice(index, 1)
         }
       })
     },
-    removeUserDisLikeComment(state, payload) {
+    removeUserDisLikeComment (state, payload) {
       state.commentUserDisLike.forEach((value, index, self) => {
         if (value === payload) {
           self.splice(index, 1)
@@ -131,7 +131,7 @@ export default {
     },
   },
   actions: {
-    async likeSongIsAdd(context, payload) {
+    async likeSongIsAdd (context, payload) {
       try {
         let res = await updateUserLikeSong(
           context.state.userInfo.user_id,
@@ -143,7 +143,7 @@ export default {
         return e
       }
     },
-    async likeSongIsDec(context, payload) {
+    async likeSongIsDec (context, payload) {
       try {
         let res = await updateRemoveUserLikeSong(
           context.state.userInfo.user_id,
@@ -155,7 +155,7 @@ export default {
         return e
       }
     },
-    async likeSingerIsAdd(context, payload) {
+    async likeSingerIsAdd (context, payload) {
       try {
         let res = await updateUserLikeSinger(
           context.state.userInfo.user_id,
@@ -167,7 +167,7 @@ export default {
         return e
       }
     },
-    async likeSingerIsDec(context, payload) {
+    async likeSingerIsDec (context, payload) {
       try {
         let res = await updateRemoveUserLikeSinger(
           context.state.userInfo.user_id,
@@ -179,7 +179,7 @@ export default {
         return e
       }
     },
-    async likePlayListsIsAdd(context, payload) {
+    async likePlayListsIsAdd (context, payload) {
       try {
         let res = await updateUserLikePlayLists(
           context.state.userInfo.user_id,
@@ -191,7 +191,7 @@ export default {
         return e
       }
     },
-    async likePlayListsIsDec(context, payload) {
+    async likePlayListsIsDec (context, payload) {
       try {
         let res = await updateRemoveUserLikePlayLists(
           context.state.userInfo.user_id,

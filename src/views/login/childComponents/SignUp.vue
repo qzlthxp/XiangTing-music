@@ -14,7 +14,15 @@
       <el-form-item label="邮箱" prop="email" required>
         <div style="display: flex;justify-content: space-between">
           <el-input style="width: 53%" ref="ruleFormEmail" v-model="ruleForm.email" placeholder="填写邮箱，获取验证码"></el-input>
-          <el-button style="width: 45%" ref="codeBtn" type="primary" :loading="codeLoading" @click="getCode('ruleForm')">获取验证码</el-button>
+          <el-button 
+            style="width: 45%" 
+            ref="codeBtn" 
+            type="primary" 
+            :loading="codeLoading" 
+            @click="getCode('ruleForm')"
+          >
+            获取验证码
+          </el-button>
         </div>
       </el-form-item>
       <el-form-item label="验证码" prop="code"  required>

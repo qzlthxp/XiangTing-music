@@ -52,6 +52,12 @@ export default {
     UserInput,
     TopComment,
   },
+  props: {
+    isUserSong: {
+      type: String,
+      default: '',
+    }
+  },
   data() {
     return {
       total: 0,
@@ -84,13 +90,14 @@ export default {
   },
   created() {
     this.getAll({
-      song_id: this.$route.params.song_id,
+      song_id: this.isUserSong === 'user_song' ? this.$route.params.user_song_id : this.$route.params.song_id,
       type: this.selectInfo[this.selectIndex].type,
     })
   },
   methods: {
     async getAll(obj) {
       try {
+        obj.is_user_song = this.isUserSong
         this.comments = await getAllComments(obj)
         this.total = this.comments[0].total
       } catch (e) {
@@ -103,10 +110,11 @@ export default {
           content: text,
           publishTime: Date.now(),
           user_id: this.$store.state.user.userInfo.user_id,
-          song_id: this.$route.params.song_id,
+          song_id: this.isUserSong === 'user_song' ? this.$route.params.user_song_id : this.$route.params.song_id,
           root_comment_id: null,
           to_comment_id: null,
           to_comment_user_name: null,
+          is_user_song: this.isUserSong
         })
         if (res.success) {
           res.data.user_photo = this.$store.state.user.userInfo.user_photo
@@ -155,10 +163,11 @@ export default {
           content: this.text,
           publishTime: Date.now(),
           user_id: this.$store.state.user.userInfo.user_id,
-          song_id: this.$route.params.song_id,
+          song_id: this.isUserSong === 'user_song' ? this.$route.params.user_song_id : this.$route.params.song_id,
           root_comment_id,
           to_comment_id,
           to_comment_user_name,
+          is_user_song: this.isUserSong
         })
         if (res.success) {
           res.data.user_photo = this.$store.state.user.userInfo.user_photo
@@ -176,10 +185,11 @@ export default {
           content: this.text,
           publishTime: Date.now(),
           user_id: this.$store.state.user.userInfo.user_id,
-          song_id: this.$route.params.song_id,
+          song_id: this.isUserSong === 'user_song' ? this.$route.params.user_song_id : this.$route.params.song_id,
           root_comment_id,
           to_comment_id,
           to_comment_user_name,
+          is_user_song: this.isUserSong
         })
         if (res.success) {
           res.data.user_photo = this.$store.state.user.userInfo.user_photo

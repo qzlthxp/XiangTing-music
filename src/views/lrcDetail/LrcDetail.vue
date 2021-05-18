@@ -14,7 +14,7 @@
       <div class="lrc-similar" v-if="Object.keys(lrc).length">
         <div style="width: 100%">
           <lrc v-if="Object.keys(lrc).length" :lrc="lrc"></lrc>
-          <comment></comment>
+          <comment is-user-song="no_user_song"></comment>
         </div>
         <similar-song
           v-if="similarSongs.length"

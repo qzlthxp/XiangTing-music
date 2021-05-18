@@ -87,7 +87,7 @@
 
     <div class="right">
       <!--喜欢 Start-->
-      <div class="like">
+      <div v-if="!isUser" class="like">
         <i
           title="喜欢"
           v-show="!isLiked"
@@ -214,14 +214,14 @@
                     {{ item.duration | getDuration }}
                   </div> -->
                   <div v-show="index === currentSelectIndex" class="select">
-                    <span
-                      ><i
+                    <span v-if="!$store.state.song.songList[index].isUser">
+                      <i
                         title="加入歌单"
                         class="fa fa-plus fa-lg fa-fw"
                         @click="addThis(index)"
-                      ></i
-                    ></span>
-                    <span>
+                      ></i>
+                    </span>
+                    <span v-if="!$store.state.song.songList[index].isUser">
                       <i
                         title="喜欢"
                         v-show="!listLike(index)"
@@ -447,9 +447,15 @@ export default {
     },
     //点击封面跳转到歌词页面
     toLrcDetail() {
-      if (this.currentIndex !== null && !this.isUser) {
-        let song_id = this.$store.state.song.songList[this.currentIndex].id
-        this.$router.push('/music_main/lrc_detail/' + song_id)
+      if (this.currentIndex !== null) {
+        if (!this.isUser) {
+          let song_id = this.$store.state.song.songList[this.currentIndex].id
+          this.$router.push('/music_main/lrc_detail/' + song_id)
+        } else {
+          let song_id = this.$store.state.song.songList[this.currentIndex].id
+          this.$router.push('/music_main/user_lrc_detail/' + song_id)
+        }
+        
       }
     },
     //点击喜欢添加歌曲
@@ -909,8 +915,8 @@ i {
   justify-content: flex-end;
   align-items: center;
 }
-.right > div:nth-child(odd) {
-  margin: 0 var(--default-margin);
+.right > div {
+  margin: 0 0 0 var(--default-margin);
 }
 .center {
   width: 150px;

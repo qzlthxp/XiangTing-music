@@ -4,7 +4,7 @@
       <img
         @click="$router.push('/music_main/user/' + info.user_id)"
         :src="info.user_photo"
-        alt=""
+        alt="用户头像"
       />
     </div>
     <div class="content">
@@ -16,7 +16,7 @@
       </div>
       <div class="select">
         <div class="time" style="margin-right:25px">
-          {{ info.publishTime | getDate }}
+          {{ publishTime(info.publishTime) }}
         </div>
         <div class="like" style="margin-right:25px">
           <i
@@ -151,10 +151,12 @@ export default {
       plaholder: '',
     }
   },
-  filters: {
-    getDate(date) {
-      return dateFormat(date)
-    },
+  computed: {
+    publishTime() {
+      return data => {
+        return dateFormat(data * 1)
+      }
+    }
   },
   methods: {
     ...mapMutations([
@@ -282,6 +284,7 @@ export default {
 .content .select {
   width: 100%;
   height: 2rem;
+  margin: 1rem 0 .5rem;
   color: #999;
   display: flex;
   align-items: center;

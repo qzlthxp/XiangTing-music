@@ -20,9 +20,9 @@
     >立即登录
     </el-button>
 
-    <div class="help">
+    <!-- <div class="help">
       <a href="javascript:;">忘记密码?</a>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -49,12 +49,6 @@ export default {
     };
   },
   methods: {
-    toLogin() {
-      this.$emit('ToLogin',{
-        'user_email': this.ruleForm.email,
-        'user_password': this.ruleForm.password,
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -62,6 +56,12 @@ export default {
         } else {
           return false;
         }
+      });
+    },
+    toLogin() {
+      this.$emit('ToLogin',{
+        'user_email': this.ruleForm.email,
+        'user_password': this.ruleForm.password,
       });
     },
   }

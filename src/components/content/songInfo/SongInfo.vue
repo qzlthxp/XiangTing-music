@@ -136,7 +136,7 @@ export default {
           num = key
         }
       })
-      if (num) {
+      if (num !== null) {
         this.$bus.$emit('play-this-song', num)
       } else {
         this.$store.commit('addSongListByUnShift', this.songs[index])

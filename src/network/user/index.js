@@ -1,6 +1,6 @@
 import { request } from '@/network/request'
 
-export function getUserInfo(userId) {
+export function getUserInfo (userId) {
   return request({
     url: '/user_info_by_id',
     method: 'get',
@@ -10,7 +10,7 @@ export function getUserInfo(userId) {
   })
 }
 
-export function getUserLikeSinger(userId) {
+export function getUserLikeSinger (userId) {
   return request({
     url: '/singer_is_user_like',
     method: 'get',
@@ -20,7 +20,7 @@ export function getUserLikeSinger(userId) {
   })
 }
 
-export function getUserLikeSong(userId) {
+export function getUserLikeSong (userId) {
   return request({
     url: '/songs_is_user_like',
     method: 'get',
@@ -30,7 +30,7 @@ export function getUserLikeSong(userId) {
   })
 }
 
-export function getUserLikePlayLists(userId) {
+export function getUserLikePlayLists (userId) {
   return request({
     url: '/play_lists_is_user_like',
     method: 'get',
@@ -40,7 +40,7 @@ export function getUserLikePlayLists(userId) {
   })
 }
 
-export function getUserLikeComment(userId) {
+export function getUserLikeComment (userId) {
   return request({
     url: '/user_like_comments',
     method: 'get',
@@ -50,7 +50,7 @@ export function getUserLikeComment(userId) {
   })
 }
 
-export function getUserDisLikeComment(userId) {
+export function getUserDisLikeComment (userId) {
   return request({
     url: '/user_dislike_comments',
     method: 'get',
@@ -60,7 +60,7 @@ export function getUserDisLikeComment(userId) {
   })
 }
 
-export function updateUserLikeSong(userId, songs) {
+export function updateUserLikeSong (userId, songs) {
   return request({
     url: '/update_user_like_song',
     method: 'post',
@@ -71,7 +71,7 @@ export function updateUserLikeSong(userId, songs) {
   })
 }
 
-export function updateRemoveUserLikeSong(userId, songId) {
+export function updateRemoveUserLikeSong (userId, songId) {
   return request({
     url: '/remove_user_like_song',
     method: 'post',
@@ -82,7 +82,7 @@ export function updateRemoveUserLikeSong(userId, songId) {
   })
 }
 
-export function updateUserLikeSinger(userId, singers) {
+export function updateUserLikeSinger (userId, singers) {
   return request({
     url: '/update_user_like_singer',
     method: 'post',
@@ -93,7 +93,7 @@ export function updateUserLikeSinger(userId, singers) {
   })
 }
 
-export function updateRemoveUserLikeSinger(userId, singerId) {
+export function updateRemoveUserLikeSinger (userId, singerId) {
   return request({
     url: '/remove_user_like_singer',
     method: 'post',
@@ -104,7 +104,7 @@ export function updateRemoveUserLikeSinger(userId, singerId) {
   })
 }
 
-export function updateUserLikePlayLists(userId, playLists) {
+export function updateUserLikePlayLists (userId, playLists) {
   return request({
     url: '/update_user_like_play_lists',
     method: 'post',
@@ -115,7 +115,7 @@ export function updateUserLikePlayLists(userId, playLists) {
   })
 }
 
-export function updateRemoveUserLikePlayLists(userId, playListsId) {
+export function updateRemoveUserLikePlayLists (userId, playListsId) {
   return request({
     url: '/remove_user_like_play_lists',
     method: 'post',
@@ -126,7 +126,7 @@ export function updateRemoveUserLikePlayLists(userId, playListsId) {
   })
 }
 
-export function getAllUserInfo(userId) {
+export function getAllUserInfo (userId) {
   return request({
     url: '/user_allInfo_by_id',
     method: 'get',
@@ -136,7 +136,7 @@ export function getAllUserInfo(userId) {
   })
 }
 
-export function updateAlUserInfo(payload) {
+export function updateAlUserInfo (payload) {
   return request({
     url: '/update_user_allInfo',
     method: 'post',
@@ -150,7 +150,7 @@ export function updateAlUserInfo(payload) {
   })
 }
 
-export function getOwn(id) {
+export function getOwn (id) {
   return request({
     url: '/songs_by_user_id',
     method: 'get',
@@ -160,7 +160,17 @@ export function getOwn(id) {
   })
 }
 
-export function likeComment(obj) {
+export function getSong (id) {
+  return request({
+    url: '/song_by_song_id',
+    method: 'get',
+    params: {
+      user_song_id: id,
+    },
+  })
+}
+
+export function likeComment (obj) {
   return request({
     url: '/like_comment',
     method: 'post',
@@ -170,12 +180,23 @@ export function likeComment(obj) {
   })
 }
 
-export function dislikeComment(obj) {
+export function dislikeComment (obj) {
   return request({
     url: '/dislike_comment',
     method: 'post',
     data: {
       ...obj,
     },
+  })
+}
+
+
+export function deleteSong (id) {
+  return request({
+    url: '/delete_song',
+    method: 'post',
+    data: {
+      user_song_id: id
+    }
   })
 }

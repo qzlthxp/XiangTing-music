@@ -27,7 +27,7 @@
       </div>
       <div class="select">
         <div class="time" style="margin-right:25px">
-          {{ secInfo.publishTime | getDate }}
+          {{ publishTime(secInfo.publishTime) }}
         </div>
         <div class="like" style="margin-right:25px">
           <i
@@ -134,10 +134,12 @@ export default {
       showMoreItem: false,
     }
   },
-  filters: {
-    getDate(date) {
-      return dateFormat(date)
-    },
+  computed: {
+    publishTime() {
+      return data => {
+        return dateFormat(data * 1)
+      }
+    }
   },
   methods: {
     ...mapMutations([

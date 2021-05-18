@@ -1,7 +1,7 @@
 //防抖 延迟执行
-export function debounce(callback, delay) {
+export function debounce (callback, delay) {
   let timer = null
-  return function(e) {
+  return function (e) {
     if (timer) clearTimeout(timer)
     timer = setTimeout(() => {
       callback(e)
@@ -9,9 +9,9 @@ export function debounce(callback, delay) {
   }
 }
 //防抖 立即执行
-export function debounceIIFE(callback, time) {
+export function debounceIIFE (callback, time) {
   let timer = null
-  return function(e) {
+  return function (e) {
     timer === null ? callback(e) : clearTimeout(timer)
     timer = setTimeout(() => {
       timer = null
@@ -19,7 +19,8 @@ export function debounceIIFE(callback, time) {
   }
 }
 //音视频时间格式化
-export function formatTime(time) {
+export function formatTime (data) {
+  const time = data * 1;
   let b = ''
   let h = parseInt(time / 3600),
     m = parseInt((time % 3600) / 60),
@@ -33,8 +34,9 @@ export function formatTime(time) {
   b += m + ':' + s
   return b
 }
+
 //日期格式化
-export function formatDate(time) {
+export function formatDate (time) {
   var date = new Date(time * 1) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
   var Y = date.getFullYear() + '-'
   var M =
@@ -47,8 +49,8 @@ export function formatDate(time) {
 
 //详细日期时间格式化
 // 使用es6的padStart()方法来补0
-export function dateFormat(timestamp) {
-  let time = new Date(timestamp)
+export function dateFormat (timestamp) {
+  let time = new Date(timestamp * 1)
   let year = time.getFullYear()
   const month = (time.getMonth() + 1).toString().padStart(2, '0')
   const date = time
@@ -74,7 +76,7 @@ export function dateFormat(timestamp) {
 }
 
 //歌词格式化
-export function formatLrc(lrc) {
+export function formatLrc (lrc) {
   let lyrics = lrc.split('\n') //lrc代表歌词文件内容的引用
   let lrcObj = {}
   for (let i = 0; i < lyrics.length; i++) {
@@ -95,7 +97,7 @@ export function formatLrc(lrc) {
 }
 
 //数据分页
-export function paging(arr, pageCount) {
+export function paging (arr, pageCount) {
   const pages = []
   arr.forEach((value, index) => {
     const page = Math.floor(index / pageCount)
@@ -108,7 +110,7 @@ export function paging(arr, pageCount) {
 }
 
 //快速排序歌单
-export function quickSortPlayLists(data, attribute) {
+export function quickSortPlayLists (data, attribute) {
   if (data.length <= 1) {
     return data
   }

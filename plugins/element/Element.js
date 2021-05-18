@@ -1,4 +1,5 @@
 import {
+  Pagination,
   Dialog,
   Autocomplete,
   Menu,
@@ -33,7 +34,8 @@ import {
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-export default function(app) {
+export default function (app) {
+  app.use(Pagination)
   app.use(Dialog)
   app.use(Autocomplete)
   app.use(Menu)

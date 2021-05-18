@@ -110,6 +110,15 @@ const routes = [
         }
       },
       {
+        path: 'user_lrc_detail/:user_song_id',
+        name: "UserLrcDetail",
+        component: () => import('@/views/userLrcDetail/UserLrcDetail'),
+        meta: {
+          title: '用户歌曲',
+          isAlive: false,
+        }
+      },
+      {
         path: 'search',
         name: "Search",
         component: () => import('@/views/search/Search'),
@@ -147,7 +156,7 @@ const router = new VueRouter({
 
 const originalPush = VueRouter.prototype.push;
 
-VueRouter.prototype.push = function(location, onResolve, onReject) {
+VueRouter.prototype.push = function (location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
   return originalPush.call(this, location).catch(err => err);
 }

@@ -43,6 +43,14 @@ export default {
       }
     },
   },
+  watch: {
+    playListsInfos: {
+      deep: true,
+      handler(newVal) {
+        this.playListsInfos = newVal
+      }
+    }
+  },
   computed: {
     isCollected() {
       return index => {

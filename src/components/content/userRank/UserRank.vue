@@ -6,7 +6,7 @@
       </span>
       <span style="margin-left: 10px">播放全部</span>
     </button>
-    <ul>
+    <ul v-if="songs.length">
       <li class="header">
         <span class="rank-num">序号</span>
         <span class="song-name">歌曲</span>
@@ -22,7 +22,7 @@
         <span class="rank-num">
           {{ index + 1 }}
         </span>
-        <span class="song-name" :title="item.song_info.name">
+        <span class="song-name" :title="item.song_info.name ">
           <a
             @mouseover="elTransform($event)"
             @mouseleave="elRemoveTransform($event)"
@@ -56,7 +56,7 @@ export default {
     songs: {
       type: Array,
       default() {
-        return []
+        return [];
       },
     },
   },
@@ -68,10 +68,11 @@ export default {
   filters: {
     formatDate,
     formatPlayNumber(n) {
-      if (n < 10000) {
-        return n
+      let number = n * 1
+      if (number < 10000) {
+        return number
       } else {
-        return (n / 1000).toFixed(1)
+        return (number / 1000).toFixed(1)
       }
     },
   },

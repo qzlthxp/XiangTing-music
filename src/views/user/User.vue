@@ -21,7 +21,8 @@
         <user-main-right
             :type="defaultType"
             :rightData="like[defaultType]"
-            :user-info="info"
+            :userInfo="info"
+            @delete-user-song="deleteUserSong"
         >
         </user-main-right>
       </div>
@@ -37,6 +38,8 @@ import {getUserInfo, getUserLikeSong, getUserLikePlayLists, getUserLikeSinger, g
 import {getSongDesc} from "@/network/lrcDetail";
 import {getSingerDetail} from "@/network/singerDetail";
 import {getPlayListsByPlayListsId} from "@/network/playListsDetail";
+import { deleteSong } from "@/network/user";
+import { getAllPlayLists } from "@/network/playlistsManage";
 
 export default {
   name: "User",
@@ -56,12 +59,14 @@ export default {
         'singers': [],
         'playLists': [],
         'own': [],
+        'ownPlayLists': []
       },
       buttons: [
         {nameIsMe: '我喜欢', nameNoMe: 'TA喜欢', class: 'fa fa-heart fa-fw fa-lg', color: '#f73859', type: 'songs'},
         {nameIsMe: '我的关注', nameNoMe: 'TA的关注', class: 'fa fa-plus fa-fw fa-lg', color: '#08a2f5', type: 'singers'},
         {nameIsMe: '我的收藏', nameNoMe: 'TA的收藏', class: 'fa fa-star fa-fw fa-lg', color: 'var(--active-color)', type: 'playLists'},
         {nameIsMe: '我的作品', nameNoMe: 'TA的作品', class: 'fa fa-music fa-fw fa-lg', color: '#747d8c', type: 'own'},
+        {nameIsMe: '我的歌单', nameNoMe: 'TA的歌单', class: 'fa fa-th-list fa-fw fa-lg', color: '#747d8c', type: 'ownPlayLists'}
       ]
     }
   },
@@ -97,11 +102,12 @@ export default {
         await this.getSingers();
         await this.getPlayLists();
         await this.getOwnSongInfo();
+        await this.getAllUserPlayLists();
       }catch (e) {
         return e;
       }
     },
-    getSongs: async function () {
+    async getSongs () {
       try {
         let songs = (await getUserLikeSong(this.$route.params.user_id)).songs;
         this.like.songs = (await getSongDesc(songs.join(','))).songs;
@@ -136,6 +142,28 @@ export default {
         return e;
       }
     },
+    async getAllUserPlayLists() {
+      try {
+        this.like.ownPlayLists = (await getAllPlayLists(this.$route.params.user_id, this.$store.state.user.userInfo.user_id)).playLists;
+      }catch (e) {
+        return e;
+      }
+    },
+    async deleteUserSong(id) {
+      try {
+        let res = await deleteSong(id)
+        if (res.status) {
+          await this.$toasted.show(res.message)
+          for (let index in this.like.own) {
+            if (this.like.own[index].id === id) {
+              this.like.own.splice(index, 1)
+            }
+          }
+        }
+      } catch (error) {
+        return error
+      }
+    },
     changeType(index) {
       this.defaultLeftIndex = index;
       this.defaultType = this.buttons[index].type;
@@ -150,7 +178,7 @@ export default {
       this.info.user_name = payload.user_name;
       this.info.user_photo = payload.user_photo;
       this.info.user_qming = payload.user_qming;
-    }
+    },
   },
   beforeRouteEnter(to, from, next) {
     let type = to.query.type;
@@ -164,7 +192,7 @@ export default {
         vm.defaultType = type;
       }
     });
-  }
+  },
 }
 </script>
 

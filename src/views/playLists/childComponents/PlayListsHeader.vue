@@ -148,12 +148,13 @@ export default {
   z-index: 9;
 }
 .top-item{
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
   font-size: 1.2rem;
   font-weight: bold;
   cursor: default;
 }
 .top-item i{
+  margin-right: .5rem;
   cursor: default;
 }
 .sec-cate{

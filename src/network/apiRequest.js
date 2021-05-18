@@ -1,14 +1,20 @@
 import axios from 'axios';
-import store from '../store/index';
+// import store from '../store/index';
 
-export function apiRequest(config) {
+export function apiRequest (config) {
   const instance = axios.create({
-    baseURL: store.state.API_BASEURL,
+    baseURL: process.env.VUE_APP_MUSIC_API,
     timeout: 5000
   });
 
   instance.interceptors.request.use(
     config => {
+      // if (config.method === 'get') {
+      //   config.params.realIP = '116.25.146.177'
+      // }
+      // if (config.method === 'post') {
+      //   config.data.realIP = '116.25.146.177'
+      // }
       return config;
     },
     error => {

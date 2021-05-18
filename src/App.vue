@@ -7,6 +7,9 @@
 <script>
 export default {
   name: 'App',
+  mounted() {
+    console.log('想听音乐 Powered By qzlthxp');
+  },
 }
 </script>
 

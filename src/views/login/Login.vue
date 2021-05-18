@@ -26,7 +26,7 @@ import SignUp from "@/views/login/childComponents/SignUp";
 import {mapMutations} from 'vuex';
 import {Login} from "@/network/login";
 import {Register} from "@/network/login";
-import {getUserLikePlayLists, getUserLikeSinger, getUserLikeSong} from "@/network/user";
+// import {getUserLikePlayLists, getUserLikeSinger, getUserLikeSong} from "@/network/user";
 
 export default {
   name: "Login",
@@ -47,7 +47,7 @@ export default {
         if (res.status) {
           await this.saveUser(res);
           await this.$router.replace('/');
-          await this.getUserLike(res.user_id);
+          // await this.getUserLike(res.user_id);
         }else {
           await this.$message.error('邮箱密码错误');
         }
@@ -71,18 +71,18 @@ export default {
         return e;
       }
     },
-    async getUserLike(userId) {
-      try {
-        let SingerVal = await getUserLikeSinger(userId);
-        await this.saveLikeSinger(SingerVal.singers);
-        let SongVal = await getUserLikeSong(userId);
-        await this.saveLikeSong(SongVal.songs);
-        let PlayListsVal = await getUserLikePlayLists(userId);
-        await this.saveLikePlayLists(PlayListsVal.playLists);
-      }catch (e) {
-        return e;
-      }
-    },
+    // async getUserLike(userId) {
+    //   try {
+    //     let SingerVal = await getUserLikeSinger(userId);
+    //     await this.saveLikeSinger(SingerVal.singers);
+    //     let SongVal = await getUserLikeSong(userId);
+    //     await this.saveLikeSong(SongVal.songs);
+    //     let PlayListsVal = await getUserLikePlayLists(userId);
+    //     await this.saveLikePlayLists(PlayListsVal.playLists);
+    //   }catch (e) {
+    //     return e;
+    //   }
+    // },
     ToLoginBox() {
       this.showSignUp = false;
     },
